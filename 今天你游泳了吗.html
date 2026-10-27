@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#A8D8F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="游泳日记">
+<title>🫧 游泳日记</title>
+<style>
+:root{
+  --bg:#F0F9FF; --card:#fff;
+  --ink:#2E5A7E; --sub:#6FA3C7; --mute:#A8C8DE;
+  --line:#E6F4FC; --bd:#CFE8F8;
+  /* 主色调：温柔浅蓝渐变 */
+  --me:#9DD9F3; --me2:#C5ECFF; --meS:#5BB8E0;
+  /* 朋友：蜜桃粉 */
+  --fr:#FFC4D6; --fr2:#FFE0EA; --frS:#F79CB8;
+  --accent:#B8E6D0; --accentS:#7DD4B0;
+  --warn:#FFD98E; --bad:#FFAAB8;
+  --r:22px;
+  --sh:0 3px 20px rgba(155,217,243,.14);
+  --sh2:0 12px 40px rgba(155,217,243,.26);
+  --sb:env(safe-area-inset-bottom,0px);
+  --st:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+.wrap{max-width:520px;margin:0 auto;padding-bottom:calc(70px + var(--sb))}
+
+/* ===== HERO ===== */
+.hero{position:relative;overflow:hidden;color:#fff;
+  background:linear-gradient(155deg,#8FD4F2 0%,#B5E5FA 45%,#D4F0FF 100%);
+  padding:calc(18px + var(--st)) 20px 34px;
+  box-shadow:0 8px 32px rgba(143,212,242,.3)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(112deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.07) 36%,transparent 58%)}
+.hwave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:24px;display:block;z-index:1}
+.hero>*{position:relative;z-index:2}
+.htop{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.brand{font-size:19px;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:7px}
+.geo{display:flex;align-items:center;gap:6px;font-size:11.5px;background:rgba(255,255,255,.2);
+  padding:6px 13px;border-radius:20px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25)}
+.gdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);flex:none;transition:all .3s}
+.gdot.on{background:#7DD4B0;box-shadow:0 0 8px rgba(125,212,176,.5)}
+.gdot.near{background:#FFD98E;box-shadow:0 0 8px rgba(255,217,142,.5)}
+.hmain{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+.hl .k{font-size:12px;opacity:.72;letter-spacing:.5px}
+.hl .v{font-size:52px;font-weight:800;line-height:1;letter-spacing:-2px;margin:3px 0 5px;text-shadow:0 3px 14px rgba(0,0,0,.1);font-variant-numeric:tabular-nums}
+.hl .s{font-size:12.5px;opacity:.78}
+.hr{flex:none;text-align:right;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.32);
+  border-radius:14px;padding:7px 13px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hr .hp{font-size:11px;opacity:.8;letter-spacing:.5px}
+.hr .pv{font-size:22px;font-weight:800;line-height:1.25;font-variant-numeric:tabular-nums}
+.hr .pv small{font-size:12px;font-weight:600;opacity:.75}
+.pbar{height:6px;border-radius:4px;background:rgba(255,255,255,.35);margin-top:14px;overflow:hidden}
+.pbar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#fff,#E8F8FF);transition:width .5s}
+
+/* ===== 双卡环形 ===== */
+.pad20{padding:16px 16px 20px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden;border:1px solid rgba(207,232,248,.8)}
+.card>h3{margin:0;padding:15px 17px 6px;font-size:13.5px;color:var(--sub);font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.card>h3 em{font-style:normal;font-size:11.5px;color:var(--mute);font-weight:400}
+.pad{padding:6px 17px 16px}
+.tip{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-radius:16px;font-size:13px;line-height:1.6;margin-bottom:10px;border:1px solid transparent}
+.tip .ic{font-size:15px;flex:none;line-height:1.5}
+.tip.ok{background:#E8FBF3;border-color:#C2F0DE;color:#3E9B76}
+.tip.warn{background:#FFF8ED;border-color:#F8E8C4;color:#C08A2E}
+.tip.info{background:#EBF7FF;border-color:#CFE8F8;color:#4E9BD6}
+.tip.bad{background:#FFF2F5;border-color:#FADDE4;color:#D68AA0}
+.tip b{font-weight:600}
+
+.pcards{display:flex;gap:12px}
+.pc{flex:1;background:#fff;border-radius:24px;padding:15px 8px 13px;text-align:center;box-shadow:var(--sh);border:1px solid rgba(207,232,248,.9);position:relative;overflow:hidden}
+.pc::before{content:'';position:absolute;inset:0 0 auto;height:3px;border-radius:24px 24px 0 0}
+.pc.me::before{background:linear-gradient(90deg,var(--me),var(--me2))}
+.pc.fr::before{background:linear-gradient(90deg,var(--fr),var(--fr2))}
+.pc.ghostcard{border-style:dashed;box-shadow:none;background:#FBFDFF;color:var(--mute);cursor:pointer}
+.pc.ghostcard::before{display:none}
+.pc .nm{font-size:12.5px;color:var(--sub);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ring{--p:0;width:80px;height:80px;border-radius:50%;margin:9px auto 6px;position:relative;display:grid;place-items:center;
+  background:conic-gradient(var(--c) calc(var(--p) * 1%), #EAF6FE 0);transition:background .5s}
+.ring::before{content:'';position:absolute;inset:8px;border-radius:50%;background:#fff;box-shadow:inset 0 1px 4px rgba(46,90,126,.04)}
+.pc.me .ring{--c:var(--me)} .pc.fr .ring{--c:var(--fr)}
+.ring .n{position:relative;font-size:25px;font-weight:800;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.pc.me .ring .n{color:var(--meS)} .pc.fr .ring .n{color:var(--frS)}
+.pc .u{font-size:11.5px;color:var(--mute)}
+.pc .tag{position:absolute;top:12px;right:8px;font-size:10px;font-weight:600;color:#fff;padding:3px 8px;border-radius:20px;background:var(--bad);box-shadow:0 2px 6px rgba(255,170,184,.35)}
+.pc .tag.hidden{display:none}
+
+/* ===== 账号登录门 ===== */
+.gatemask{position:fixed;inset:0;z-index:300;background:linear-gradient(160deg,#DFF2FD 0%,#F0F9FF 55%,#FFE9F1 100%);
+  display:none;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.gatemask.show{display:flex}
+.gate{width:100%;max-width:360px;text-align:center;animation:pop .35s cubic-bezier(.2,.9,.3,1)}
+.gate .g-logo{font-size:52px;line-height:1;filter:drop-shadow(0 6px 16px rgba(143,212,242,.4))}
+.gate h2{margin:10px 0 4px;font-size:23px;font-weight:800;color:var(--ink)}
+.gate .g-sub{font-size:12.5px;color:var(--sub);margin-bottom:22px}
+.acc-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.acc-card{display:flex;align-items:center;gap:12px;background:#fff;border-radius:20px;padding:14px 16px;
+  box-shadow:var(--sh);border:1px solid rgba(207,232,248,.9);cursor:pointer;text-align:left;transition:transform .15s}
+.acc-card:active{transform:scale(.97)}
+.acc-card .acc-av{width:42px;height:42px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:19px;
+  background:linear-gradient(150deg,#EBF7FF,#DFF2FD)}
+.acc-card .acc-nm{flex:1;font-size:15px;font-weight:600;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acc-card .acc-sub{font-size:11px;color:var(--mute);font-weight:400;display:block;margin-top:1px}
+.acc-card .acc-go{font-size:12px;color:var(--mute);flex:none}
+.acc-card.add{border-style:dashed;box-shadow:none;background:rgba(255,255,255,.55);justify-content:center;color:var(--sub)}
+.acc-card.add .acc-av{background:none;font-size:20px;color:var(--me)}
+.acc-card.add .acc-nm{text-align:center;font-weight:500;font-size:13.5px}
+.pin-box{background:#fff;border-radius:24px;padding:22px 20px 18px;box-shadow:var(--sh);border:1px solid rgba(207,232,248,.9);
+  text-align:left;margin-bottom:12px}
+.pin-box .pin-title{font-size:15px;font-weight:700;margin-bottom:14px;text-align:center}
+.pin-box .pin-title b{color:var(--meS)}
+.pin-box input{margin-bottom:10px}
+.pin-box .pin-acts{display:flex;gap:10px;margin-top:6px}
+.pin-err{font-size:12px;color:#E88AA8;margin:0 0 8px}
+.pin-forgot{display:block;margin:10px auto 0;background:none;border:none;color:var(--mute);font-size:12px;cursor:pointer;text-decoration:underline}
+.pin-note{font-size:11px;color:var(--mute);line-height:1.6;margin:10px 2px 0}
+.shake{animation:shk .4s}
+@keyframes shk{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.gate-foot{font-size:10.5px;color:var(--mute);margin-top:6px;line-height:1.7}
+
+/* ===== 签到弹层 ===== */
+.popmask{position:fixed;inset:0;background:rgba(46,90,126,.45);display:none;align-items:center;justify-content:center;z-index:120;backdrop-filter:blur(4px);padding:20px}
+.popmask.open{display:flex}
+.popup{background:#fff;border-radius:30px;padding:32px 26px 26px;width:100%;max-width:340px;text-align:center;animation:pop .3s cubic-bezier(.2,.9,.3,1);box-shadow:var(--sh2)}
+@keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.popup .pin{font-size:44px;margin-bottom:8px}
+.popup h4{margin:0 0 4px;font-size:19px;font-weight:700}
+.popup .psub{font-size:13px;color:var(--mute);margin-bottom:22px}
+.bigbtn{width:140px;height:140px;border-radius:50%;border:none;color:#fff;font-size:18px;font-weight:600;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;margin:0 auto 8px;
+  transition:transform .15s,box-shadow .25s;letter-spacing:.5px}
+.bigbtn:active{transform:scale(.94)}
+.bigbtn.me{background:linear-gradient(150deg,var(--me),var(--me2));box-shadow:0 9px 28px rgba(155,217,243,.42)}
+.bigbtn.fr{background:linear-gradient(150deg,var(--fr),var(--fr2));box-shadow:0 9px 28px rgba(255,196,214,.38)}
+.bigbtn .ic{font-size:30px;line-height:1;margin-bottom:5px}
+.bigbtn small{font-size:11px;font-weight:400;opacity:.82}
+.popfoot{margin-top:18px;display:flex;gap:10px;justify-content:center}
+.popfoot button{font-size:13px;color:var(--mute);background:none;border:none;cursor:pointer;padding:6px 12px}
+
+/* ===== 在场提示条 ===== */
+.activebar{position:sticky;top:0;z-index:30;margin:0 0 14px;padding:12px 16px;border-radius:var(--r);
+  background:#E8FBF3;border:1px solid #C2F0DE;box-shadow:var(--sh);
+  display:none;align-items:center;gap:10px}
+.activebar.show{display:flex}
+.activebar .ab-dot{width:9px;height:9px;border-radius:50%;background:var(--accentS);flex:none;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.activebar .ab-info{flex:1;font-size:13px;color:#3E9B76}
+.activebar .ab-info b{font-weight:600}
+.activebar .ab-btn{padding:7px 14px;border-radius:20px;background:var(--bad);color:#fff;border:none;font-size:12.5px;cursor:pointer;font-weight:500;white-space:nowrap}
+
+/* ===== 备注弹层 ===== */
+.notesheet{position:fixed;inset:0;background:rgba(46,90,126,.42);display:none;align-items:flex-end;justify-content:center;z-index:130;backdrop-filter:blur(3px)}
+.notesheet.open{display:flex}
+.sheet{background:#fff;width:100%;max-width:520px;border-radius:28px 28px 0 0;padding:24px 20px calc(24px + var(--sb));max-height:85vh;overflow-y:auto;animation:up .26s cubic-bezier(.2,.9,.3,1)}
+@keyframes up{from{transform:translateY(100%)}}
+.sheet h4{margin:0 0 4px;font-size:17px;font-weight:700}
+.sheet .hint{font-size:12.5px;color:var(--mute);margin-bottom:16px}
+.sheet .fld{margin:14px 0}
+.sheet .fld label{display:block;font-size:12px;color:var(--sub);margin-bottom:7px;font-weight:500}
+input,textarea,select{font-family:inherit;font-size:16px;color:var(--ink);background:#F5FAFF;border:1px solid var(--bd);border-radius:12px;padding:10px 12px;width:100%;transition:border-color .2s,box-shadow .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--me);box-shadow:0 0 0 3px rgba(155,217,243,.18)}
+textarea{resize:vertical;min-height:70px}
+.btn{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.btn.pri{background:linear-gradient(150deg,var(--me),var(--me2));color:#fff;border-radius:14px;padding:13px 20px;font-size:15px;font-weight:600;box-shadow:0 6px 18px rgba(155,217,243,.32)}
+.btn.pri:active{transform:scale(.97)}
+.btn.full{width:100%}
+.btn.ghost{background:#F4F9FD;border:1px solid var(--bd);border-radius:14px;padding:13px 20px;font-size:15px;color:var(--sub);font-weight:500}
+.btn.ghost:active{transform:scale(.97)}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--sub)}
+.crowdchips{display:flex;gap:8px;flex-wrap:wrap}
+.cchip{padding:10px 18px;border-radius:20px;border:1px solid var(--bd);background:#fff;font-size:13px;color:var(--sub);cursor:pointer;transition:all .18s}
+.cchip.on{border-color:var(--me);background:linear-gradient(150deg,var(--me),var(--me2));color:#fff;box-shadow:0 4px 12px rgba(155,217,243,.28)}
+
+/* ===== 可爱时间选择器（滚轮式 · 精确分钟） ===== */
+.timesel{display:flex;align-items:center;gap:10px}
+.timesel .ts-btn{display:flex;align-items:center;gap:9px;flex:1;padding:12px 15px;background:linear-gradient(150deg,#F5FCFF,#EDF7FE);
+  border:1.5px solid var(--bd);border-radius:16px;font-size:14px;color:var(--ink);cursor:pointer;transition:all .2s;
+  box-shadow:0 2px 10px rgba(155,217,243,.12)}
+.timesel .ts-btn:active{transform:scale(.98);border-color:var(--me)}
+.timesel .ts-btn .ic{font-size:17px;flex:none;line-height:1}
+.timesel .ts-btn .placeholder{color:var(--mute);font-size:13px;flex:1;text-align:left}
+.timesel .ts-btn .val{font-weight:700;color:var(--meS);font-size:16px;letter-spacing:.5px;flex:1;text-align:left;font-variant-numeric:tabular-nums}
+.timesel .ts-btn .arrow{font-size:12px;color:var(--mute);flex:none;transition:transform .2s}
+.timesel .ts-btn.open .arrow{transform:rotate(90deg)}
+/* 弹层 */
+.ts-panel{position:fixed;inset:0;background:rgba(46,90,126,.42);display:none;align-items:flex-end;justify-content:center;z-index:150;
+  backdrop-filter:blur(3px)}
+.ts-panel.open{display:flex}
+.ts-pad{background:#fff;width:100%;max-width:520px;border-radius:28px 28px 0 0;padding:20px 18px calc(18px + var(--sb));
+  animation:up .26s cubic-bezier(.2,.9,.3,1);box-shadow:0 -6px 30px rgba(143,212,242,.2)}
+.ts-pad .ts-ttl{text-align:center;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.ts-pad .ts-sub{text-align:center;font-size:12px;color:var(--mute);margin-bottom:18px}
+.ts-wheel{display:flex;align-items:stretch;justify-content:center;gap:0;position:relative;height:170px;margin:0 auto;
+  background:linear-gradient(180deg,#FBFEFF 0%,#F2F9FE 40%,#F2F9FE 60%,#FBFEFF 100%);border-radius:18px;
+  border:1.5px solid var(--bd)}
+.ts-wheel::before{content:'';position:absolute;top:50%;left:12px;right:12px;height:44px;transform:translateY(-50%);
+  border-radius:12px;background:linear-gradient(135deg,rgba(155,217,243,.16),rgba(197,236,255,.16));
+  border:1px solid rgba(155,217,243,.28);pointer-events:none;z-index:1}
+.ts-col{flex:1;height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding:63px 0}
+.ts-col::-webkit-scrollbar{display:none}
+.ts-col .ts-item{height:44px;display:grid;place-items:center;font-size:21px;font-weight:600;color:#CFE4F2;
+  scroll-snap-align:center;transition:color .15s,transform .15s;font-variant-numeric:tabular-nums}
+.ts-col .ts-item.sel{color:var(--meS);transform:scale(1.06)}
+.ts-sep{align-self:center;font-size:22px;font-weight:700;color:var(--me);line-height:1;
+  font-variant-numeric:tabular-nums;pointer-events:none;z-index:2;
+  transform:translateY(-1px)}
+.ts-acts{display:flex;gap:10px;margin-top:18px}
+.ts-pad .ts-msg{text-align:center;font-size:11.5px;color:var(--mute);margin-top:12px}
+
+/* ===== 统计 ===== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st{background:linear-gradient(160deg,#F5FCFF,#EBF6FE);border:1px solid var(--bd);border-radius:16px;padding:13px 10px;text-align:center}
+.st .v{font-size:23px;font-weight:800;color:var(--meS);letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.st .k{font-size:11px;color:var(--mute);margin-top:3px}
+/* 周图表 */
+.wchart{display:flex;align-items:flex-end;gap:10px;height:140px;padding:10px 4px 0}
+.wc-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px}
+.wc-bars{display:flex;align-items:flex-end;gap:3px;height:100px;width:100%;justify-content:center}
+.wc-bar{width:12px;border-radius:6px 6px 0 0;transition:height .4s;min-height:2px;position:relative}
+.wc-bar.me{background:linear-gradient(180deg,var(--me),var(--me2))}
+.wc-bar.fr{background:linear-gradient(180deg,var(--fr),var(--fr2))}
+.wc-val{font-size:10px;color:var(--mute);font-variant-numeric:tabular-nums}
+.wc-day{font-size:10.5px;color:var(--mute);margin-top:2px}
+.wc-day.today{color:var(--meS);font-weight:600}
+.wlg{display:flex;gap:16px;justify-content:center;margin-top:12px;font-size:11px;color:var(--mute)}
+.wlg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+
+/* ===== 月图表 ===== */
+.mchart{padding:8px 0}
+.mc-hd{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:14px}
+.mc-hd button{width:36px;height:36px;border-radius:50%;border:1px solid var(--bd);background:#fff;color:var(--sub);font-size:16px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.mc-hd button:active{transform:scale(.9);background:linear-gradient(150deg,var(--me),var(--me2));color:#fff;border-color:var(--me)}
+.mc-hd .mctxt{font-size:15px;font-weight:600;color:var(--ink);min-width:100px;text-align:center}
+.mc-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.mc-sm{background:linear-gradient(160deg,#F5FCFF,#EBF6FE);border:1px solid var(--bd);border-radius:14px;padding:10px 4px;text-align:center}
+.mc-sm .v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.mc-sm .v.me{color:var(--meS)} .mc-sm .v.fr{color:var(--frS)}
+.mc-sm .k{font-size:9.5px;color:var(--mute);margin-top:2px}
+/* 日历网格 */
+.mcal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.mcal-weekdays span{text-align:center;font-size:10px;color:var(--mute);font-weight:600;padding:4px 0}
+.mcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mcal-cell{aspect-ratio:1/1;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;background:#F7FBFE;border:1px solid transparent;transition:all .15s}
+.mcal-cell.empty{background:transparent}
+.mcal-cell.weekend:not(.today){background:#FDF6FA}
+.mcal-cell.today{border-color:var(--me);box-shadow:0 0 0 2px rgba(155,217,243,.25);background:linear-gradient(150deg,rgba(155,217,243,.1),rgba(197,236,255,.1))}
+.mcal-day{font-size:11px;color:var(--mute);font-weight:500;line-height:1}
+.mcal-cell.today .mcal-day{color:var(--meS);font-weight:700}
+.mcal-dot{display:grid;place-items:center;min-width:18px;height:18px;border-radius:50%;font-size:10px;font-weight:700;color:#fff}
+.mcal-dot.l0{background:linear-gradient(150deg,var(--me),var(--me2));opacity:.5}
+.mcal-dot.l1{background:linear-gradient(150deg,var(--me),var(--me2))}
+.mcal-dot.l2{background:linear-gradient(150deg,#5CBCE0,#8FD9F2)}
+.mcal-dot.l3{background:linear-gradient(150deg,#4BA8D4,#6CC4EA)}
+.mcal-dot.l4{background:linear-gradient(150deg,#3A92C0,#5CBCE0)}
+
+/* ===== 个人成长 ===== */
+.gm-row{margin-top:14px;font-size:13px;color:var(--sub);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.gm-row b{color:var(--meS);font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.gm-mom{font-size:11.5px;font-weight:600}
+.gm-mom.up{color:#3E9B76}
+.gm-mom.down{color:#E88AA8}
+.gm-mom.flat{color:var(--mute)}
+.gchart{display:flex;align-items:flex-end;gap:8px;height:104px;padding:10px 2px 0}
+.gc-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.gc-bars{display:flex;align-items:flex-end;height:64px;width:100%;justify-content:center}
+.gc-bar{width:14px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--me),var(--me2));min-height:2px;transition:height .4s}
+.gc-val{font-size:9px;color:var(--mute);font-variant-numeric:tabular-nums;line-height:1}
+.gc-day{font-size:9.5px;color:var(--mute);white-space:nowrap}
+
+/* ===== 时间线（记录列表） ===== */
+.timeline{padding:4px 0}
+.tlrow{padding:12px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
+.tlrow:last-child{border-bottom:none}
+.tlrow .tl-who{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:13px;color:#fff;margin-top:1px}
+.tlrow .tl-who.me{background:linear-gradient(150deg,var(--me),var(--me2))}
+.tlrow .tl-who.fr{background:linear-gradient(150deg,var(--fr),var(--fr2))}
+.tlrow .tl-mid{flex:1;min-width:0}
+.tlrow .tl-mid .tl-date{font-size:14px;font-weight:600;line-height:1.4}
+.tlrow .tl-mid .tl-sub{font-size:11.5px;color:var(--mute);margin-top:3px;line-height:1.7;word-break:break-word}
+.tlrow .tl-mid .tl-note{display:inline-block;font-size:12px;color:var(--sub);background:#F4F9FD;border-radius:10px;
+  padding:5px 10px;margin-top:6px;line-height:1.6;word-break:break-word}
+.tlrow .tl-dur{flex:none;font-size:14px;font-weight:700;color:var(--sub);padding-top:1px;white-space:nowrap}
+
+/* ===== 5 条 + 滑动容器 ===== */
+.scrollbox{margin-top:2px}
+.sb-inner{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  scrollbar-width:thin;scrollbar-color:var(--bd) transparent}
+.sb-inner::-webkit-scrollbar{width:4px}
+.sb-inner::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
+.sb-fade{position:sticky;bottom:0;display:block;height:38px;margin-bottom:-38px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),#fff 88%);pointer-events:none}
+.sb-hint{display:flex;align-items:center;justify-content:center;gap:5px;font-size:11.5px;color:var(--mute);padding:9px 0 2px}
+.sb-hint::before{content:'⌵';font-size:13px;color:var(--me)}
+
+/* ===== 对账 ===== */
+.recon{margin-top:12px}
+.recon-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.recon-row:last-child{border-bottom:none}
+.recon-row .rl{font-size:13px;color:var(--sub);flex:1}
+.recon-row .ri{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.recon-row .ri input{width:80px;text-align:center;padding:8px;font-size:15px;font-weight:600}
+.recon-row .ri.match{color:var(--accentS)}
+.recon-row .ri.diff{color:#E88AA8}
+.recon-result{margin-top:14px;padding:14px 16px;border-radius:14px;text-align:center;font-size:14px;font-weight:600}
+.recon-result.ok{background:#E8FBF3;color:#3E9B76;border:1px solid #C2F0DE}
+.recon-result.warn{background:#FFF8ED;color:#C08A2E;border:1px solid #F8E8C4}
+.recon-result.bad{background:#FFF2F5;color:#D68AA0;border:1px solid #FADDE4}
+
+/* ===== 设置 ===== */
+.sg{padding:4px 17px 16px}
+.ln{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
+.ln:last-child{border-bottom:none}
+.ln>span:first-child{flex:none;color:var(--sub);font-size:13.5px}
+.ln .ln-sub{display:block;font-size:11px;color:var(--mute);margin-top:1px;font-weight:400}
+.inline{width:auto;min-width:120px;text-align:center}
+.mb0{margin-bottom:0}
+.hidden{display:none!important}
+
+/* ===== TAB ===== */
+.tabs{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(18px);
+  border-top:1px solid rgba(207,232,248,.9);display:flex;padding-bottom:var(--sb);z-index:50;box-shadow:0 -4px 20px rgba(155,217,243,.08)}
+.tab{flex:1;padding:8px 0 9px;text-align:center;font-size:10.5px;color:var(--mute);transition:color .2s;background:none;border:none;cursor:pointer}
+.tab .ti{font-size:21px;display:block;line-height:1.35;transition:transform .2s;filter:grayscale(1);opacity:.48}
+.tab.on{color:var(--meS);font-weight:600}
+.tab.on .ti{transform:scale(1.12);filter:none;opacity:1}
+
+/* ===== 同步（新增） ===== */
+.code{background:#F5FAFF;border:1px dashed var(--bd);border-radius:12px;padding:11px;font-size:11px;
+  word-break:break-all;color:var(--sub);max-height:140px;overflow:auto;line-height:1.6}
+.syncd{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);flex:none;transition:all .3s}
+.syncd.ok{background:#7DD4B0;box-shadow:0 0 8px rgba(125,212,176,.55)}
+.syncd.warn{background:var(--warn);box-shadow:0 0 8px rgba(255,217,142,.55)}
+.syncd.bad{background:#FF9FB2;box-shadow:0 0 8px rgba(255,159,178,.55)}
+.syncd.busy{background:#fff;animation:sbl 1s infinite}
+@keyframes sbl{50%{opacity:.3}}
+.chipok{display:inline-flex;align-items:center;font-size:11px;padding:4px 11px;border-radius:20px;
+  background:#E8FBF3;border:1px solid #C2F0DE;color:#3E9B76;font-weight:600;white-space:nowrap}
+
+/* ===== 高德地图选点 ===== */
+.mapmask{position:fixed;inset:0;background:rgba(46,90,126,.5);display:none;align-items:flex-end;justify-content:center;z-index:180;backdrop-filter:blur(3px)}
+.mapmask.open{display:flex}
+.mapwrap{background:#fff;width:100%;max-width:520px;border-radius:26px 26px 0 0;overflow:hidden;animation:up .26s cubic-bezier(.2,.9,.3,1);box-shadow:0 -6px 30px rgba(143,212,242,.25)}
+.mapbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;font-size:15px;font-weight:700}
+.mapbar button{width:32px;height:32px;border-radius:50%;border:none;background:#F4F9FD;color:var(--sub);font-size:15px;cursor:pointer}
+.mapbar .mb-sub{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:1px}
+.mapbox{height:56vh;position:relative;background:#EBF7FF}
+.mapbox .maploading{position:absolute;inset:0;display:grid;place-items:center;font-size:13px;color:var(--sub)}
+.mapacts{display:flex;gap:10px;padding:14px 18px calc(16px + var(--sb))}
+
+/* ===== 定位设置：当前泳馆 + 地址搜索 ===== */
+.poolnow{display:flex;align-items:center;gap:12px;background:linear-gradient(160deg,#F5FCFF,#EBF6FE);
+  border:1px solid var(--bd);border-radius:16px;padding:13px 15px;margin-bottom:14px}
+.poolnow .pn-ic{font-size:22px;flex:none;line-height:1}
+.poolnow .pn-body{flex:1;min-width:0}
+.poolnow .pn-nm{font-size:14.5px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.poolnow .pn-sub{font-size:11px;color:var(--mute);margin-top:2px}
+.searchrow{display:flex;gap:8px;align-items:stretch}
+.searchrow input{flex:1;min-width:0}
+.searchrow .btn{flex:none;padding:10px 18px;white-space:nowrap}
+.fld-hint{font-size:11px;color:var(--mute);margin-top:7px;line-height:1.7}
+.placelist{margin:6px 0 14px}
+.placeitem{padding:12px 6px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:10px}
+.placeitem:last-child{border-bottom:none}
+.placeitem:active{background:#F5FAFF}
+.placeitem .pi-nm{font-size:14px;font-weight:600;color:var(--ink)}
+.placeitem .pi-ad{font-size:11.5px;color:var(--mute);margin-top:2px;line-height:1.5}
+
+/* ===== 窄屏适配（≤360px） ===== */
+@media (max-width:360px){
+  .hl .v{font-size:44px;letter-spacing:-1.5px}
+  .hr .pv{font-size:20px}
+  .ring{width:72px;height:72px}
+  .ring .n{font-size:22px}
+  .pc{padding:13px 6px 11px}
+  .pc .nm{font-size:11.5px}
+  .pc .u{font-size:10.5px}
+  .grid2{gap:8px}
+  .st{padding:11px 6px}
+  .st .v{font-size:20px}
+  .st .k{font-size:10px}
+  .mc-summary{gap:6px}
+  .mc-sm{padding:9px 2px}
+  .mc-sm .v{font-size:15px}
+  .mc-sm .k{font-size:9px}
+  .gchart{gap:5px}
+  .gc-bar{width:12px}
+  .gc-day{font-size:8.5px}
+  .gc-val{font-size:8px}
+  .hero{padding-left:16px;padding-right:16px}
+  .brand{font-size:17px}
+  .geo{font-size:10.5px;padding:5px 10px;gap:5px}
+  .tip{font-size:12.5px;padding:12px 13px}
+  .tab{font-size:10px}
+}
+
+/* ===== Toast ===== */
+.toast{position:fixed;left:50%;top:36%;transform:translate(-50%,-50%) scale(.8);background:rgba(46,90,126,.95);color:#fff;
+  padding:14px 26px;border-radius:16px;font-size:14.5px;opacity:0;pointer-events:none;transition:all .25s;z-index:400;
+  max-width:78%;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+</style>
+</head>
+<body>
+
+<!-- ========== 账号登录门 ========== -->
+<div class="gatemask" id="gate">
+  <div class="gate">
+    <div class="g-logo">🫧</div>
+    <h2>游泳日记</h2>
+    <div class="g-sub" id="gateSub">选择你的账号，记录属于自己的每一次游泳</div>
+    <div id="gateForms">
+      <div class="acc-list" id="accList"></div>
+      <!-- PIN 输入 -->
+      <div class="pin-box hidden" id="pinBox">
+        <div class="pin-title" id="pinTitle">输入 <b id="pinAccName"></b> 的 PIN</div>
+        <input id="pinInput" type="password" maxlength="8" placeholder="4-8 位字母或数字" autocomplete="off">
+        <input id="pinInput2" type="password" maxlength="8" placeholder="再输一次 PIN" autocomplete="off" class="hidden">
+        <div class="pin-err hidden" id="pinErr">PIN 不正确，请重试</div>
+        <div class="pin-acts">
+          <button class="btn ghost full" onclick="backToAccList()">返回</button>
+          <button class="btn pri full" onclick="submitPin()">进入</button>
+        </div>
+        <button class="pin-forgot" id="pinForgot" onclick="forgotPin()">忘记 PIN？</button>
+      </div>
+      <!-- 创建账号 -->
+      <div class="pin-box hidden" id="createBox">
+        <div class="pin-title" id="createTitle">创建我的账号</div>
+        <input id="newName" placeholder="你的名字，如：小明" maxlength="8" autocomplete="off">
+        <input id="newPin" type="password" maxlength="8" placeholder="设置 PIN（4-8 位字母或数字）" autocomplete="off">
+        <input id="newPin2" type="password" maxlength="8" placeholder="再输一次 PIN" autocomplete="off">
+        <div class="pin-err hidden" id="createErr"></div>
+        <div class="pin-acts">
+          <button class="btn ghost full" onclick="backToAccList()">返回</button>
+          <button class="btn pri full" onclick="submitCreate()">创建并进入</button>
+        </div>
+        <div class="pin-note">账号与记录默认只保存在本机；开启同步后，你的记录也只进入你名下的私有空间，朋友看不到任何明细。</div>
+      </div>
+    </div>
+    <div class="gate-foot">数据存本机 · 断网可记 · 联网自动同步</div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="htop">
+    <div class="brand">🫧 游泳日记</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="geo" id="syncChip" onclick="jumpSync()" style="cursor:pointer">
+        <span class="syncd" id="sdot"></span>
+        <span id="stxt">未同步</span>
+      </div>
+      <div class="geo" id="geoBox" onclick="go('set')" style="cursor:pointer">
+        <span class="gdot" id="gdot"></span>
+        <span id="gtxt">定位中…</span>
+      </div>
+    </div>
+  </div>
+  <div class="hmain">
+    <div class="hl">
+      <div class="k">整张卡剩余</div>
+      <div class="v" id="hLeft">—</div>
+      <div class="s" id="hSub">总 — 次</div>
+    </div>
+    <div class="hr">
+      <div class="hp">已消耗</div>
+      <div class="pv"><span id="hPct">0</span><small>%</small></div>
+    </div>
+  </div>
+  <div class="pbar"><i id="hBar" style="width:0%"></i>
+  <svg class="hwave" viewBox="0 0 500 26" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,13 C90,24 170,2 250,11 C330,20 410,3 500,14 L500,26 L0,26 Z" fill="#F0F9FF"/>
+  </svg>
+</header>
+
+<div class="wrap">
+
+  <div class="activebar" id="activeBar">
+    <div class="ab-dot"></div>
+    <div class="ab-info" id="abInfo"></div>
+    <button class="ab-btn" onclick="leavePool()">离开游泳馆</button>
+  </div>
+
+  <!-- ========== 首页 ========== -->
+  <div id="pg-home" class="pad20">
+    <div id="alerts"></div>
+
+    <div class="card">
+      <h3>使用额度 <em id="quotaSub"></em></h3>
+      <div class="pad">
+        <div class="pcards" id="pcards">
+          <div class="pc me">
+            <div class="nm" id="nmMe">我</div>
+            <div class="ring" id="brMe"><span class="n" id="lvMe">0</span></div>
+            <div class="u" id="ufMe">剩余 / 60 次</div>
+            <div class="tag hidden" id="tgMe">超额</div>
+          </div>
+          <div class="pc fr" id="pcFr">
+            <div class="nm" id="nmFr">朋友</div>
+            <div class="ring" id="brFr"><span class="n" id="lvFr">0</span></div>
+            <div class="u" id="ufFr">剩余 / 60 次</div>
+            <div class="tag hidden" id="tgFr">超额</div>
+          </div>
+          <div class="pc ghostcard hidden" id="pcFrHint" onclick="jumpSync()">
+            <div class="nm" style="color:var(--sub)">＋ 添加朋友账号</div>
+            <div class="u" style="margin-top:8px;line-height:1.5">对方创建账号并同步后<br>这里会显示 TA 的用量汇总</div>
+          </div>
+        </div>
+        <div class="tip info mb0 hidden" id="frSummary" style="margin-top:12px">
+          <span class="ic">🫧</span>
+          <span id="frSummaryTxt"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="quickCard">
+      <h3>快速操作</h3>
+      <div class="pad">
+        <div class="tip info mb0" id="quickTip">
+          <span class="ic">💡</span>
+          <span>到游泳馆附近打开本页，会自动弹出签到按钮。</span>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn pri full" onclick="manualSign()">
+            📍 记录我的游泳
+          </button>
+        </div>
+        <div class="grid2" style="margin-top:10px">
+          <button class="btn ghost full" onclick="exportData()">📤 导出数据</button>
+          <button class="btn ghost full" onclick="document.getElementById('fileInput').click()">📥 导入数据</button>
+          <input type="file" id="fileInput" accept=".json" class="hidden" onchange="importData(event)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 统计 ========== -->
+  <div id="pg-stat" class="pad20 hidden">
+    <div class="card">
+      <h3>总览 <em>我的数据</em></h3>
+      <div class="pad">
+        <div class="grid2">
+          <div class="st"><div class="v" id="sTotal">0</div><div class="k">我的游泳次数</div></div>
+          <div class="st"><div class="v" id="sDur">0</div><div class="k">我的累计时长(h)</div></div>
+          <div class="st"><div class="v" id="sDays">0</div><div class="k">我的游泳天数</div></div>
+          <div class="st"><div class="v" id="sAvg">0</div><div class="k">我的平均单次(分钟)</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🌱 个人成长 <em id="grName"></em></h3>
+      <div class="pad">
+        <div class="grid2">
+          <div class="st"><div class="v" id="grDur">0</div><div class="k">累计时长(h)</div></div>
+          <div class="st"><div class="v" id="grSwims">0</div><div class="k">完成游泳(次)</div></div>
+          <div class="st"><div class="v" id="grAvg">0</div><div class="k">平均单次(分钟)</div></div>
+          <div class="st"><div class="v" id="grDays">0</div><div class="k">游泳天数</div></div>
+        </div>
+        <div class="gm-row">本月 <b id="grMonth">0h</b><span class="gm-mom flat" id="grMom"></span></div>
+        <div class="gchart" id="gChart"></div>
+        <div class="tip ok mb0" style="margin-top:12px">
+          <span class="ic">🏆</span>
+          <span>个人最佳：<b id="grBest">—</b></span>
+        </div>
+        <div class="tip info mb0" style="margin-top:8px">
+          <span class="ic">💙</span>
+          <span>这里只和过去的自己比较，不与他人攀比。柱状图是最近 8 周每周的游泳时长。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>本周活跃度 <em>近 7 天</em></h3>
+      <div class="pad">
+        <div class="wchart" id="wChart"></div>
+        <div class="wlg" id="wLg">
+          <span><i style="background:linear-gradient(180deg,var(--me),var(--me2))"></i>我</span>
+        </div>
+        <div class="tip info mb0" style="margin-top:12px">
+          <span class="ic">📈</span>
+          <span>柱形高度代表当天游泳次数。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>月度汇总 <em id="mMonthLabel"></em></h3>
+      <div class="pad">
+        <div class="mc-hd">
+          <button onclick="mPrev()">‹</button>
+          <span class="mctxt" id="mTxt"></span>
+          <button onclick="mNext()">›</button>
+        </div>
+        <div class="mc-summary" id="mSummary"></div>
+        <div class="mcal" id="mCal"></div>
+        <div class="wlg" id="mLg">
+          <span><i style="background:linear-gradient(180deg,var(--me),var(--me2))"></i>我</span>
+        </div>
+        <div class="tip info mb0" style="margin-top:12px">
+          <span class="ic">📅</span>
+          <span>日历格子里显示我当天游泳次数，颜色越深表示游得越多，可以切换月份查看历史。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>游泳时长记录 <em id="durCount"></em></h3>
+      <div class="pad">
+        <div class="scrollbox">
+          <div class="sb-inner" id="durInner"></div>
+          <div class="sb-fade hidden" id="durFade"></div>
+        </div>
+        <div class="sb-hint hidden" id="durHint"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>拥挤情况记录 <em id="crowdCount"></em></h3>
+      <div class="pad">
+        <div class="scrollbox">
+          <div class="sb-inner" id="crowdInner"></div>
+          <div class="sb-fade hidden" id="crowdFade"></div>
+        </div>
+        <div class="sb-hint hidden" id="crowdHint"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 设置 ========== -->
+  <div id="pg-set" class="pad20 hidden">
+    <div class="card">
+      <h3>🫧 我的账号</h3>
+      <div class="sg">
+        <div class="ln">
+          <span>我的名字</span>
+          <input class="inline" id="setNmMe" placeholder="如：小明" onchange="saveName(this.value)" style="max-width:140px">
+        </div>
+        <div class="ln">
+          <span>修改 PIN</span>
+          <button class="btn sm" onclick="openChangePin()">修改</button>
+        </div>
+        <div class="ln">
+          <span>切换账号<span class="ln-sub">退出后回到账号选择页</span></span>
+          <button class="btn sm" onclick="logout()">切换 / 退出</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>定位设置 <em id="poolState"></em></h3>
+      <div class="sg">
+        <div class="poolnow">
+          <div class="pn-ic">📍</div>
+          <div class="pn-body">
+            <div class="pn-nm" id="poolName">未设置游泳馆</div>
+            <div class="pn-sub" id="poolSub">设置后，到达附近会自动提醒签到</div>
+          </div>
+        </div>
+        <div class="fld" style="margin:0 0 4px">
+          <label>搜索游泳馆名称</label>
+          <div class="searchrow">
+            <input id="placeQuery" placeholder="如：奥体中心游泳馆" onkeydown="if(event.key==='Enter')searchPlace()">
+            <button class="btn sm" onclick="searchPlace()">🔍 搜索</button>
+          </div>
+          <div class="fld-hint">输入名称搜索地点，在结果里点一下就设为游泳馆</div>
+        </div>
+        <div class="ln">
+          <span>触发半径(米)<span class="ln-sub">进入这个范围自动弹签到</span></span>
+          <input class="inline" id="setRad" type="number" placeholder="500" onchange="saveGeo()" style="max-width:100px">
+        </div>
+        <div class="ln">
+          <span>到达提醒距离(米)<span class="ln-sub">距泳馆这么远时提醒「即将到达」</span></span>
+          <input class="inline" id="setAlertR" type="number" placeholder="1000" onchange="saveGeo()" style="max-width:100px">
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn ghost full" onclick="setCurrentAsPool()">📌 当前位置设为泳馆</button>
+          <button class="btn ghost full" onclick="openMapPicker()">🗺️ 地图选点</button>
+        </div>
+        <div class="fld" style="margin-top:14px">
+          <label>高德 Key · 两个都要填（各管一个功能）</label>
+          <input id="setAmap" placeholder="① 地址搜索 Key（服务平台选「Web 服务」）" onchange="saveAmapKey()">
+          <input id="setAmapJs" placeholder="② 地图选点 Key（服务平台选「Web端(JS API)」）" onchange="saveAmapJsKey()" style="margin-top:8px">
+          <input id="setAmapJsCode" placeholder="③ 地图 Key 的安全密钥（必填，在控制台该 Key 详情里查看）" onchange="saveAmapJsCode()" style="margin-top:8px">
+          <div class="fld-hint">
+            高德控制台里<b>一个 Key 只能选一个服务平台</b>，所以在同一个应用下添加两个 Key：选「Web 服务」的用于搜名称，选「Web端(JS API)」的用于地图选点。只填一个的话，另一半功能会提示平台不匹配。安全密钥只属于地图 Key，与搜索 Key 无关；不填地图会白屏。Key 只存本机、不上传。
+            <a href="https://lbs.amap.com/" target="_blank" style="color:var(--meS);font-weight:600">点此申请 →</a>
+          </div>
+        </div>
+        <div class="tip info mb0">
+          <span class="ic">📍</span>
+          <span>设好泳馆后：进入范围自动弹签到、快到时有「即将到达」提醒、离开时提醒结算时长。</span>
+        </div>
+        <div class="tip warn mb0 hidden" id="secWarn">
+          <span class="ic">⚠️</span>
+          <span>当前不是 HTTPS 环境：浏览器会拒绝定位、高德地图也会加载失败。请通过部署后的网址（<b>https://</b>…）打开使用，不要直接双击本地 HTML 文件。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🧮 对账核验</h3>
+      <div class="sg">
+        <p style="font-size:12.5px;color:var(--mute);margin:0 0 4px">输入游泳馆小程序显示的剩余次数，和本应用记录进行核对，防止遗漏或刷错。</p>
+        <div class="recon">
+          <div class="recon-row">
+            <span class="rl">小程序显示：整张卡剩余</span>
+            <span class="ri"><input type="number" id="reconInput" placeholder="0" oninput="calcRecon()"></span>
+          </div>
+          <div class="recon-row">
+            <span class="rl">本应用推算：整张卡剩余</span>
+            <span class="ri" id="reconApp">—</span>
+          </div>
+          <div class="recon-row">
+            <span class="rl">差额</span>
+            <span class="ri" id="reconDiff">—</span>
+          </div>
+        </div>
+        <div class="recon-result ok" id="reconResult">
+          ✨ 输入小程序剩余次数后自动比对
+        </div>
+        <div class="tip warn mb0" style="margin-top:12px">
+          <span class="ic">💡</span>
+          <span>差额为 0 表示记录一致；若不为 0，说明可能有多刷、漏记或别人使用了你们的卡，需要排查。</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>额度与数据</h3>
+      <div class="sg">
+        <div class="ln">
+          <span>每人额度<span class="ln-sub">整卡总额 = 每人额度 × 账号数</span></span>
+          <input class="inline" id="setQuota" type="number" value="60" onchange="saveQuota()" style="max-width:100px">
+        </div>
+        <div class="ln">
+          <span>清空我的记录<span class="ln-sub">只清当前账号，不影响朋友</span></span>
+          <button class="btn sm" style="color:#fff;background:var(--bad);border-color:var(--bad)" onclick="clearAll()">清空</button>
+        </div>
+        <div class="tip warn mb0">
+          <span class="ic">⚠️</span>
+          <span>清空后不可恢复，请先导出备份。</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 同步 ===== -->
+    <div class="card" id="syncCard">
+      <h3>🔄 数据同步 <em id="syncTip"></em></h3>
+      <div class="sg">
+        <div class="ln">
+          <span>同步方式</span>
+          <select class="inline" id="setProv" onchange="saveSync()" style="max-width:180px">
+            <option value="">关闭（仅本机）</option>
+            <option value="gist">GitHub Gist（推荐）</option>
+            <option value="worker">自建接口</option>
+          </select>
+        </div>
+
+        <div id="gistBox" class="hidden">
+          <div class="ln">
+            <span>GitHub Token</span>
+            <input class="inline" id="setToken" type="password" placeholder="ghp_…" onchange="saveSync()" style="max-width:150px">
+          </div>
+          <div class="ln">
+            <span>房间 Gist ID</span>
+            <input class="inline" id="setGist" placeholder="留空则新建" onchange="saveSync()" style="max-width:150px">
+          </div>
+          <div style="display:flex;gap:10px;padding:12px 0">
+            <button class="btn pri full" onclick="gistCreate()">✨ 创建房间</button>
+            <button class="btn ghost full" onclick="syncNow(1)">立即同步</button>
+          </div>
+          <div id="inviteBox" class="hidden" style="padding-bottom:8px">
+            <div style="font-size:12px;color:var(--mute);margin-bottom:8px">把这行链接发给朋友，他点开就自动加入 👇</div>
+            <div class="code" id="inviteTxt"></div>
+            <div style="display:flex;gap:10px;margin-top:10px">
+              <button class="btn sm full" onclick="copyInvite()">复制链接</button>
+              <button class="btn sm full" onclick="shareInvite()">分享</button>
+            </div>
+          </div>
+          <div class="tip info mb0" style="margin-top:10px">
+            <span class="ic">🔐</span>
+            <span>Token 只保存在你自己的手机上，不会写进代码。
+              <a href="https://github.com/settings/tokens/new?scopes=gist&description=swimcard" target="_blank"
+                 style="color:var(--meS);font-weight:600">点这里生成（只勾 gist）</a></span>
+          </div>
+        </div>
+
+        <div id="workerBox" class="hidden">
+          <div class="ln">
+            <span>接口地址</span>
+            <input class="inline" id="setUrl" placeholder="https://xxx.workers.dev" onchange="saveSync()" style="max-width:180px">
+          </div>
+          <div class="ln">
+            <span>房间码</span>
+            <input class="inline" id="setRoom" placeholder="如 8848" onchange="saveSync()" style="max-width:110px">
+          </div>
+          <div style="padding:12px 0">
+            <button class="btn pri full" onclick="syncNow(1)">立即同步</button>
+          </div>
+        </div>
+
+        <div class="tip info mb0" style="margin-top:12px">
+          <span class="ic">💡</span>
+          <span>新版同步为<b>双文件结构</b>：共享文件只存卡设置与双方用量汇总，你的流水只进你的私有文件，谁记的对方都看不到明细。
+            数据先存本机，断网照样能签到，联网后自动补传。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 签到弹层 ========== -->
+<div class="popmask" id="signPop">
+  <div class="popup">
+    <div class="pin">🏊‍♀️</div>
+    <h4>欢迎来到游泳馆！</h4>
+    <div class="psub" id="popSub">检测到你已到达，快来记录今天的运动吧</div>
+    <div id="popBtns"></div>
+    <div class="popfoot">
+      <button onclick="closePop()">稍后再说</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 备注弹层 ========== -->
+<div class="notesheet" id="noteSheet">
+  <div class="sheet">
+    <h4>记录游泳备注</h4>
+    <div class="hint" id="noteHint"></div>
+    <div class="fld">
+      <label>拥挤程度</label>
+      <div class="crowdchips" id="crowdChips">
+        <button class="cchip" data-v="空闲">☺️ 空闲</button>
+        <button class="cchip" data-v="适中">😌 适中</button>
+        <button class="cchip" data-v="人多">😞 人多</button>
+        <button class="cchip" data-v="爆满">😡 爆满</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label>🕐 开始拥挤的时间（选填）</label>
+      <div class="timesel" id="timeSelWrap"></div>
+    </div>
+    <div class="fld">
+      <label>备注</label>
+      <textarea id="noteText" placeholder="比如：今天泳道人很多，7点半后基本满员，下次可以早点来…"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn ghost full" onclick="closeNote()">跳过</button>
+      <button class="btn pri full" onclick="saveNote()">保存备注</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 修改 PIN 弹层 ========== -->
+<div class="notesheet" id="pinSheet">
+  <div class="sheet">
+    <h4>修改 PIN</h4>
+    <div class="hint">修改后立即可用，请牢记新 PIN</div>
+    <div class="fld">
+      <label>当前 PIN</label>
+      <input id="cpOld" type="password" maxlength="8" placeholder="输入现在的 PIN">
+    </div>
+    <div class="fld">
+      <label>新 PIN（4-8 位字母或数字）</label>
+      <input id="cpNew" type="password" maxlength="8" placeholder="输入新 PIN">
+    </div>
+    <div class="fld">
+      <label>确认新 PIN</label>
+      <input id="cpNew2" type="password" maxlength="8" placeholder="再输一次新 PIN">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn ghost full" onclick="closeChangePin()">取消</button>
+      <button class="btn pri full" onclick="submitChangePin()">确认修改</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TAB ========== -->
+<div class="tabs">
+  <button class="tab on" data-p="home" onclick="go('home')"><span class="ti">🏠</span>首页</button>
+  <button class="tab" data-p="stat" onclick="go('stat')"><span class="ti">📊</span>统计</button>
+  <button class="tab" data-p="set" onclick="go('set')"><span class="ti">⚙️</span>设置</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   游泳日记 v3
+   - 账号制：每人独立账号 + 本机 PIN，记录/统计/成长完全私有
+   - 卡级汇总（名字/累计次数/最近游泳日）跨账号共享
+   - 统计页所有列表统一「前 5 条 + 上滑查看更多」
+   - 定位增强：签到带距离 / 到达提醒 / 离开提醒 / 高德地图选点
+   ========================================================= */
+const DEF = {
+  v: 3,
+  current: null,
+  accounts: {},            // { me:{...}, fr:{...} } 只含本机已激活账号
+  shared: {
+    quota: 60,
+    pool: { lat: null, lng: null, name: '', radius: 500, alertR: 1000 },
+    members: {},           // { id:{ name, used, lastSwimAt, rev } } 跨账号共享的汇总
+    rev: 0
+  },
+  prov: '', token: '', gist: '', url: '', room: '',
+  syncedAt: 0
+};
+const EMOJI = { me: '🩵', fr: '🩷' };
+let S = load();
+
+/* ---------- 存储 / 迁移 ---------- */
+function load() {
+  const d = JSON.parse(localStorage.getItem('swimCardV3') || 'null');
+  if (d) return Object.assign(structuredClone(DEF), d);
+  const old = JSON.parse(localStorage.getItem('swimCardV2') || 'null');
+  if (old && old.logs) return migrateV2(old);
+  return structuredClone(DEF);
+}
+function migrateV2(old) {
+  const mk = id => ({
+    id,
+    name: (old.names && old.names[id]) || (id === 'me' ? '我' : '朋友'),
+    emoji: EMOJI[id] || '🫧',
+    pin: '', salt: '', needPin: true,
+    createdAt: Date.now(),
+    logs: (old.logs || []).filter(l => l.who === id).map(l => { const c = { ...l }; delete c.who; return c; }),
+    active: (old.active && (old.logs || []).some(l => l.id === old.active && l.who === id)) ? old.active : null,
+    del: [], delLog: [], rev: 0
+  });
+  const accs = { me: mk('me'), fr: mk('fr') };
+  const members = {};
+  ['me', 'fr'].forEach(id => {
+    const used = accs[id].logs.reduce((s, l) => s + (l.count || 1), 0);
+    const last = accs[id].logs.reduce((m, l) => Math.max(m, l.date || 0), 0);
+    members[id] = { name: accs[id].name, used, lastSwimAt: last, rev: 1 };
+  });
+  // 旧数据备份，留后路
+  try { localStorage.setItem('swimCardV2.bak', JSON.stringify(old)); } catch (e) {}
+  return {
+    v: 3, current: null, accounts: accs,
+    shared: {
+      quota: old.quota || 60,
+      pool: Object.assign({ lat: null, lng: null, name: '', radius: 500, alertR: 1000 }, old.pool || {}),
+      members, rev: 0
+    },
+    prov: old.prov || '', token: old.token || '', gist: old.gist || '', url: old.url || '', room: old.room || '',
+    syncedAt: 0
+  };
+}
+function save() {
+  if (S.current && S.accounts[S.current]) S.accounts[S.current].rev = Date.now();
+  localStorage.setItem('swimCardV3', JSON.stringify(S));
+  scheduleSync();
+}
+function A() { return S.accounts[S.current]; }
+function memberCount() {
+  return new Set([...Object.keys(S.accounts), ...Object.keys(S.shared.members || {})]).size;
+}
+function usedOf(id) {
+  if (S.accounts[id]) return S.accounts[id].logs.reduce((s, l) => s + (l.count || 1), 0);
+  const m = (S.shared.members || {})[id];
+  return m ? m.used : null;
+}
+function lastSwimOf(id) {
+  if (S.accounts[id]) return S.accounts[id].logs.reduce((m, l) => Math.max(m, l.date || 0), 0);
+  const m = (S.shared.members || {})[id];
+  return m ? m.lastSwimAt : null;
+}
+function otherId() { return S.current === 'me' ? 'fr' : 'me'; }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---------- PIN（本地轻量保护，非加密） ---------- */
+function pinHash(pin, salt) {
+  let h = 5381;
+  const s = salt + '|' + pin;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+  for (let r = 0; r < 4; r++) { let x = h >>> 0; for (let i = 0; i < 300; i++) x = (x * 33 + s.charCodeAt(i % s.length)) >>> 0; h = x >>> 0; }
+  return h.toString(16);
+}
+function validPin(pin) { return /^[A-Za-z0-9]{4,8}$/.test(pin); }
+function mkSalt() { return Math.random().toString(36).slice(2, 10); }
+
+/* ---------- 通用工具 ---------- */
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+function fmtDate(ts) {
+  const d = new Date(ts), p = n => String(n).padStart(2, '0');
+  return `${d.getMonth() + 1}月${d.getDate()}日 ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+function fmtTime(ts) {
+  const d = new Date(ts);
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+}
+function formatDur(ms) {
+  const m = Math.round(ms / 60000);
+  if (m < 60) return m + '分钟';
+  const h = Math.floor(m / 60), mm = m % 60;
+  return mm ? `${h}小时${mm}分` : `${h}小时`;
+}
+function fmtDist(m) { return m < 1000 ? `${Math.round(m)}m` : `${(m / 1000).toFixed(1)}km`; }
+function dayKey(ts) { const d = new Date(ts); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; }
+function dayLabel(ts) {
+  const d = new Date(ts), w = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const yad = new Date(today); yad.setDate(yad.getDate() - 1);
+  const dd = new Date(d); dd.setHours(0, 0, 0, 0);
+  if (dd.getTime() === today.getTime()) return '今天';
+  if (dd.getTime() === yad.getTime()) return '昨天';
+  return `${d.getMonth() + 1}月${d.getDate()}日 周${w}`;
+}
+function crowdIcon(c) { return { '空闲': '☺️', '适中': '😌', '人多': '😞', '爆满': '😡' }[c] || '📊'; }
+function dist(lat1, lng1, lat2, lng2) {
+  const R = 6371000, toR = d => d * Math.PI / 180;
+  const dLat = toR(lat2 - lat1), dLng = toR(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toR(lat1)) * Math.cos(toR(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+function curDist() {
+  if (!lastCoords || S.shared.pool.lat == null) return null;
+  return Math.round(dist(lastCoords.latitude, lastCoords.longitude, S.shared.pool.lat, S.shared.pool.lng));
+}
+
+/* =========================================================
+   账号登录门
+   ========================================================= */
+let pendingAccId = null;
+function showGate() { document.getElementById('gate').classList.add('show'); renderGate(); }
+function hideGate() { document.getElementById('gate').classList.remove('show'); }
+function renderGate() {
+  const localIds = Object.keys(S.accounts);
+  const remoteIds = Object.keys(S.shared.members || {}).filter(id => !S.accounts[id]);
+  let html = '';
+  localIds.forEach(id => {
+    const a = S.accounts[id];
+    html += `<div class="acc-card" onclick="askPin('${id}')">
+      <div class="acc-av">${a.emoji || EMOJI[id] || '🫧'}</div>
+      <div class="acc-nm">${esc(a.name)}<span class="acc-sub">${a.needPin ? '旧版数据迁移 · 请先设置 PIN' : '本机账号'}</span></div>
+      <div class="acc-go">${a.needPin ? '设 PIN ›' : '进入 ›'}</div>
+    </div>`;
+  });
+  remoteIds.forEach(id => {
+    const m = S.shared.members[id];
+    html += `<div class="acc-card" onclick="activateRemote('${id}')">
+      <div class="acc-av">${EMOJI[id] || '🫧'}</div>
+      <div class="acc-nm">${esc(m.name)}<span class="acc-sub">朋友的账号 · 点击在本机激活</span></div>
+      <div class="acc-go">激活 ›</div>
+    </div>`;
+  });
+  if (localIds.length < 2) {
+    html += `<div class="acc-card add" onclick="showCreate()">
+      <div class="acc-av">＋</div>
+      <div class="acc-nm">${localIds.length ? '添加第二个账号' : '创建我的账号'}</div>
+    </div>`;
+  }
+  document.getElementById('accList').innerHTML = html;
+  document.getElementById('gateSub').textContent = localIds.length
+    ? '选择你的账号，记录属于自己的每一次游泳'
+    : '欢迎使用！先创建你的账号，朋友在自己手机上创建 TA 的，两边记录互不打扰';
+  backToAccList();
+}
+function backToAccList() {
+  document.getElementById('pinBox').classList.add('hidden');
+  document.getElementById('createBox').classList.add('hidden');
+  document.getElementById('accList').classList.remove('hidden');
+  pendingAccId = null;
+}
+function askPin(id) {
+  pendingAccId = id;
+  const acc = S.accounts[id];
+  document.getElementById('accList').classList.add('hidden');
+  document.getElementById('pinErr').classList.add('hidden');
+  const inp = document.getElementById('pinInput'), inp2 = document.getElementById('pinInput2');
+  inp.value = ''; inp2.value = '';
+  if (acc.needPin) {
+    document.getElementById('pinTitle').innerHTML = `为 <b>${esc(acc.name)}</b> 设置 PIN`;
+    inp.placeholder = '设置 PIN（4-8 位字母或数字）';
+    inp2.classList.remove('hidden');
+    document.getElementById('pinForgot').classList.add('hidden');
+  } else {
+    document.getElementById('pinTitle').innerHTML = `输入 <b>${esc(acc.name)}</b> 的 PIN`;
+    inp.placeholder = '4-8 位字母或数字';
+    inp2.classList.add('hidden');
+    document.getElementById('pinForgot').classList.remove('hidden');
+  }
+  document.getElementById('pinBox').classList.remove('hidden');
+  setTimeout(() => inp.focus(), 80);
+}
+function submitPin() {
+  const acc = S.accounts[pendingAccId];
+  if (!acc) return;
+  const pin = document.getElementById('pinInput').value.trim();
+  const pin2 = document.getElementById('pinInput2').value.trim();
+  const showErr = m => {
+    const box = document.getElementById('pinBox');
+    const err = document.getElementById('pinErr');
+    err.textContent = m; err.classList.remove('hidden');
+    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+  };
+  if (!pin) return;
+  if (acc.needPin) {
+    /* 迁移账号首次登录：设置 PIN */
+    if (!validPin(pin)) return showErr('PIN 需为 4-8 位字母或数字');
+    if (pin !== pin2) return showErr('两次 PIN 不一致');
+    const salt = mkSalt();
+    acc.pin = pinHash(pin, salt); acc.salt = salt; acc.needPin = false;
+    save(); enterAccount(pendingAccId); return;
+  }
+  if (pinHash(pin, acc.salt) === acc.pin) enterAccount(pendingAccId);
+  else {
+    showErr('PIN 不正确，请重试');
+    document.getElementById('pinInput').value = '';
+  }
+}
+document.getElementById('pinInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitPin(); });
+function showCreate() {
+  document.getElementById('accList').classList.add('hidden');
+  document.getElementById('createTitle').textContent =
+    Object.keys(S.accounts).length ? '添加第二个账号' : '创建我的账号';
+  document.getElementById('createErr').classList.add('hidden');
+  ['newName', 'newPin', 'newPin2'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('createBox').classList.remove('hidden');
+}
+function submitCreate() {
+  const name = document.getElementById('newName').value.trim();
+  const p1 = document.getElementById('newPin').value, p2 = document.getElementById('newPin2').value;
+  const err = document.getElementById('createErr');
+  const fail = m => { err.textContent = m; err.classList.remove('hidden'); };
+  if (!name) return fail('请填写名字');
+  if (!validPin(p1)) return fail('PIN 需为 4-8 位字母或数字');
+  if (p1 !== p2) return fail('两次 PIN 不一致');
+  err.classList.add('hidden');
+  const id = Object.keys(S.accounts).includes('me') ? 'fr' : 'me';
+  const salt = mkSalt();
+  S.accounts[id] = {
+    id, name, emoji: EMOJI[id] || '🫧', pin: pinHash(p1, salt), salt,
+    createdAt: Date.now(), logs: [], active: null, del: [], delLog: [], rev: 0
+  };
+  save();
+  enterAccount(id);
+}
+function activateRemote(id) {
+  const m = S.shared.members[id];
+  if (!confirm(`把「${m.name}」的账号激活到本机？\n激活后 TA 的流水会同步到本机（仍只对登录该账号的人可见）。`)) return;
+  const p1 = prompt(`为「${m.name}」设置本机 PIN（4-8 位字母或数字）：`, '');
+  if (!p1) return;
+  if (!validPin(p1.trim())) { toast('PIN 需为 4-8 位字母或数字'); return; }
+  const salt = mkSalt();
+  S.accounts[id] = {
+    id, name: m.name, emoji: EMOJI[id] || '🫧', pin: pinHash(p1.trim(), salt), salt,
+    createdAt: Date.now(), logs: [], active: null, del: [], delLog: [], rev: 0
+  };
+  save(); renderGate(); toast('已激活，私有记录将在下次同步后出现');
+}
+function enterAccount(id) {
+  S.current = id;
+  save(); hideGate();
+  initApp();
+  toast(`欢迎回来，${S.accounts[id].name} ${EMOJI[id] || ''}`);
+}
+function logout() {
+  if (!confirm('退出当前账号？退出后回到账号选择页。')) return;
+  S.current = null; save(); showGate();
+}
+function forgotPin() {
+  if (!pendingAccId) return;
+  const acc = S.accounts[pendingAccId];
+  if (!confirm(`忘记 PIN 只能清空本机上「${acc.name}」的私有数据。\n· 已开启同步：记录还在云端，重设 PIN 并同步后可恢复\n· 未开启同步：记录将丢失\n\n确定继续吗？`)) return;
+  acc.logs = []; acc.active = null; acc.del = []; acc.delLog = []; acc.pin = ''; acc.salt = ''; acc.needPin = false;
+  save();
+  const p1 = prompt(`为「${acc.name}」设置新 PIN（4-8 位字母或数字）：`, '');
+  if (p1 && validPin(p1.trim())) {
+    const salt = mkSalt();
+    acc.pin = pinHash(p1.trim(), salt); acc.salt = salt; save();
+    toast('PIN 已重设，进入后同步即可恢复记录');
+  } else if (p1) { toast('PIN 格式不正确，请在登录页重试'); }
+  renderGate();
+}
+function openChangePin() { document.getElementById('pinSheet').classList.add('open'); }
+function closeChangePin() { document.getElementById('pinSheet').classList.remove('open'); }
+function submitChangePin() {
+  const acc = A();
+  const oldV = document.getElementById('cpOld').value;
+  const n1 = document.getElementById('cpNew').value, n2 = document.getElementById('cpNew2').value;
+  if (pinHash(oldV, acc.salt) !== acc.pin) { toast('当前 PIN 不正确'); return; }
+  if (!validPin(n1)) { toast('新 PIN 需为 4-8 位字母或数字'); return; }
+  if (n1 !== n2) { toast('两次新 PIN 不一致'); return; }
+  const salt = mkSalt();
+  acc.pin = pinHash(n1, salt); acc.salt = salt; save();
+  closeChangePin(); toast('PIN 已修改 ✓');
+}
+
+/* =========================================================
+   可爱时间选择器（滚轮式 · 精确分钟）
+   ========================================================= */
+let selTime = '';
+let layerHour = 0, layerMin = 0;
+function buildTimeSel() {
+  const wrap = document.getElementById('timeSelWrap');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div class="ts-btn" id="tsBtn" onclick="openTimePanel(event)">
+      <span class="ic">🫧</span>
+      <span id="tsVal" class="placeholder">选择拥挤开始的时间</span>
+      <span class="arrow">›</span>
+    </div>`;
+}
+function openTimePanel(e) {
+  if (e) e.stopPropagation();
+  const cur = selTime || fmtTimeNow();
+  const [hh, mm] = cur.split(':').map(Number);
+  layerHour = hh; layerMin = mm;
+  const hrs = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+  const mins = Array.from({ length: 60 }, (_, i) => String(i).padStart(2, '0'));
+  const layer = document.createElement('div');
+  layer.className = 'ts-panel';
+  layer.innerHTML = `
+    <div class="ts-pad">
+      <div class="ts-ttl">⏰ 选择拥挤开始的时间</div>
+      <div class="ts-sub">可以精确到每一分钟</div>
+      <div class="ts-wheel">
+        <div class="ts-col" id="tsHour">${hrs.map((h, i) => `<div class="ts-item" data-i="${i}">${h}</div>`).join('')}</div>
+        <div class="ts-sep">:</div>
+        <div class="ts-col" id="tsMin">${mins.map((m, i) => `<div class="ts-item" data-i="${i}">${m}</div>`).join('')}</div>
+      </div>
+      <div class="ts-acts">
+        <button class="btn ghost full" onclick="closeTimePanel()">取消</button>
+        <button class="btn pri full" onclick="confirmTime()">确认</button>
+      </div>
+      <div class="ts-msg" id="tsMsg"></div>
+    </div>`;
+  document.body.appendChild(layer);
+  void layer.offsetWidth;
+  layer.classList.add('open');
+
+  const hourCol = layer.querySelector('#tsHour');
+  const minCol = layer.querySelector('#tsMin');
+  const msg = layer.querySelector('#tsMsg');
+
+  const scrollToIndex = (col, idx) => { col.scrollTop = idx * 44; refreshSel(col, idx); };
+  const refreshSel = (col, idx) => {
+    col.querySelectorAll('.ts-item').forEach(it => it.classList.toggle('sel', Number(it.dataset.i) === idx));
+  };
+  const init = () => { scrollToIndex(hourCol, layerHour); scrollToIndex(minCol, layerMin); };
+  requestAnimationFrame(() => requestAnimationFrame(init));
+  setTimeout(init, 60);
+  setTimeout(init, 200);
+
+  const bindSnap = (col, isHour) => {
+    let timer;
+    col.addEventListener('scroll', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const idx = Math.round(col.scrollTop / 44);
+        const clamped = Math.max(0, Math.min(isHour ? 23 : 59, idx));
+        col.scrollTop = clamped * 44;
+        if (isHour) layerHour = clamped; else layerMin = clamped;
+        refreshSel(col, clamped);
+        showCrowdHint(layerHour, msg);
+      }, 70);
+    }, { passive: true });
+  };
+  bindSnap(hourCol, true);
+  bindSnap(minCol, false);
+  showCrowdHint(layerHour, msg);
+  layer.addEventListener('click', ev => { if (ev.target === layer) closeTimePanel(); });
+}
+function showCrowdHint(h, msg) {
+  const H = parseInt(h);
+  let t = '';
+  if (H <= 9) t = '🌅 清晨 · 通常人少，泳道宽敞';
+  else if (H <= 11) t = '☀️ 上午 · 人还不多，适合慢游';
+  else if (H <= 14) t = '🍚 中午 · 午休人流，略有增加';
+  else if (H <= 17) t = '🏫 下午 · 学生放学，开始变挤';
+  else if (H <= 19) t = '🌆 傍晚 · 下班高峰，最常见人多';
+  else if (H <= 21) t = '🌙 晚间 · 晚场人多，泳道紧张';
+  else t = '🌛 深夜 · 人渐少，清场前较空';
+  msg.textContent = t;
+}
+function fmtTimeNow() {
+  const d = new Date();
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mm = String(d.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+function confirmTime() {
+  const layer = document.querySelector('.ts-panel');
+  if (!layer) return;
+  const h = String(layerHour).padStart(2, '0');
+  const m = String(layerMin).padStart(2, '0');
+  selTime = `${h}:${m}`;
+  const btn = document.getElementById('tsBtn');
+  btn.innerHTML = `<span class="ic">🫧</span><span class="val">${selTime}</span><span class="arrow">›</span>`;
+  btn.classList.add('open');
+  closeTimePanel();
+}
+function closeTimePanel() {
+  const layer = document.querySelector('.ts-panel');
+  if (layer) { layer.classList.remove('open'); setTimeout(() => layer.remove(), 200); }
+}
+
+/* =========================================================
+   页面切换
+   ========================================================= */
+function go(p) {
+  ['home', 'stat', 'set'].forEach(k => {
+    document.getElementById('pg-' + k).classList.toggle('hidden', k !== p);
+    document.querySelector(`.tab[data-p="${k}"]`).classList.toggle('on', k === p);
+  });
+  if (p === 'stat') renderStat();
+  if (p === 'set') renderSet();
+}
+
+/* =========================================================
+   签到 / 离场 / 备注
+   ========================================================= */
+function openSignPop() {
+  document.getElementById('popBtns').innerHTML = `
+    <button class="bigbtn me" onclick="doSign()"><span class="ic">🏊</span>${esc(A().name)}<br>今日游泳</button>`;
+  document.getElementById('signPop').classList.add('open');
+}
+function closePop() { document.getElementById('signPop').classList.remove('open'); }
+function doSign() {
+  const now = Date.now();
+  const rec = {
+    id: now + '_' + Math.random().toString(36).slice(2, 6),
+    date: now, enter: now, leave: null, count: 1,
+    note: '', crowd: '', crowdTime: '', dist: curDist()
+  };
+  A().logs.unshift(rec); A().active = rec.id;
+  save(); closePop(); render();
+  toast(`已记录 1 次 · ${A().name}`);
+}
+function manualSign() {
+  if (A().active) { toast('当前已有在场记录，请先"离开游泳馆"'); return; }
+  openSignPop();
+  document.getElementById('signPop').onclick = e => { if (e.target === document.getElementById('signPop')) closePop(); };
+}
+let pendingNoteId = null;
+function leavePool() {
+  const acc = A();
+  if (!acc.active) return;
+  const rec = acc.logs.find(l => l.id === acc.active);
+  if (!rec) { acc.active = null; save(); render(); return; }
+  rec.leave = Date.now(); acc.active = null; save(); render();
+  pendingNoteId = rec.id;
+  selTime = '';
+  buildTimeSel();
+  document.getElementById('noteHint').textContent = `${dayLabel(rec.enter)} ${acc.name}的游泳已结束，记录一下今天的体验吧~`;
+  document.getElementById('noteSheet').classList.add('open');
+}
+function closeNote() { document.getElementById('noteSheet').classList.remove('open'); pendingNoteId = null; resetNoteForm(); }
+function saveNote() {
+  if (!pendingNoteId) return;
+  const rec = A().logs.find(l => l.id === pendingNoteId);
+  if (!rec) return;
+  rec.crowd = Array.from(document.querySelectorAll('#crowdChips .cchip')).find(c => c.classList.contains('on'))?.dataset.v || '';
+  rec.crowdTime = selTime;
+  rec.note = document.getElementById('noteText').value;
+  save(); render(); closeNote(); toast('备注已保存 ✓');
+}
+function resetNoteForm() {
+  document.querySelectorAll('#crowdChips .cchip').forEach(c => c.classList.remove('on'));
+  selTime = '';
+  document.getElementById('noteText').value = '';
+}
+document.addEventListener('click', e => { if (e.target.classList && e.target.classList.contains('cchip')) e.target.classList.toggle('on'); });
+function delLog(id) {
+  if (!confirm('确定删除这条记录？')) return;
+  const acc = A();
+  const rec = acc.logs.find(l => l.id === id);
+  acc.logs = acc.logs.filter(l => l.id !== id);
+  if (rec) { acc.del.push(id); acc.delLog.push({ id, who: id, date: rec.date }); }
+  if (acc.active === id) acc.active = null;
+  save(); render(); toast('已删除');
+}
+
+/* =========================================================
+   对账
+   ========================================================= */
+function appLeft() {
+  const total = S.shared.quota * memberCount();
+  let used = usedOf('me') || 0;
+  const fr = usedOf('fr');
+  if (fr != null) used += fr;
+  else used = usedOf('me') || 0; // 朋友用量未知时只按自己推算（会偏大，提示同步）
+  return Math.max(0, total - used);
+}
+function frKnown() { return usedOf('fr') != null; }
+function calcRecon() {
+  document.getElementById('reconApp').textContent = appLeft();
+  const inp = document.getElementById('reconInput').value;
+  const box = document.getElementById('reconResult');
+  if (inp === '' || isNaN(parseFloat(inp))) {
+    box.className = 'recon-result ok';
+    box.textContent = '✨ 输入小程序剩余次数后自动比对';
+    document.getElementById('reconDiff').textContent = '—';
+    document.getElementById('reconDiff').className = 'ri';
+    return;
+  }
+  const diff = appLeft() - parseFloat(inp);
+  const absDiff = Math.abs(diff);
+  document.getElementById('reconDiff').textContent = (diff > 0 ? '+' : '') + diff;
+  if (diff === 0) {
+    box.className = 'recon-result ok';
+    box.textContent = '✅ 完全一致！记录没有遗漏';
+    document.getElementById('reconDiff').className = 'ri match';
+  } else if (absDiff <= 2) {
+    box.className = 'recon-result warn';
+    box.textContent = `⚠️ 差额 ${diff > 0 ? '少' : '多'}了 ${absDiff} 次，可能刚刷过或偶尔延迟`;
+    document.getElementById('reconDiff').className = 'ri diff';
+  } else {
+    box.className = 'recon-result bad';
+    box.textContent = `❌ 差额较大（${diff > 0 ? '本应用记多了' : '本应用记少了'} ${absDiff} 次），建议检查是否有漏记或多刷`;
+    document.getElementById('reconDiff').className = 'ri diff';
+  }
+}
+
+/* =========================================================
+   定位
+   ========================================================= */
+let lastCoords = null, geoNear = false, popShown = false, arriveHinted = false, wasNear = false;
+/* 定位是否可用：file:// 双击打开、http:// 非 localhost 都不行（Chromium 里 file:// 的 isSecureContext 仍是 true，需单独判协议） */
+function geoSecure() {
+  if (location.protocol === 'file:') return false;
+  return window.isSecureContext !== false;
+}
+/* 定位失败原因分类，给出可操作的提示 */
+function geoErrMsg(e) {
+  if (!geoSecure()) return '定位需要 HTTPS 环境：请通过部署后的网址打开，不要直接双击本地文件';
+  switch (e && e.code) {
+    case 1: return '定位权限被拒绝：请点浏览器地址栏左侧的定位图标，改为允许后刷新';
+    case 2: return '定位不可用：请检查手机/电脑的系统定位服务是否开启';
+    case 3: return '定位超时：请到窗边或阳台等开阔处，重试一次';
+    default: return '定位失败：请检查网络、定位权限与系统定位服务';
+  }
+}
+function initGeo() {
+  setGeoUI();
+  if (!navigator.geolocation) { setGeoText('浏览器不支持定位'); return; }
+  if (!geoSecure()) { setGeoText('定位需要 HTTPS 环境（见设置页提示）'); return; }
+  const opts = { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 };
+  navigator.geolocation.watchPosition(p => onPos(p.coords), e => { setGeoText(geoErrMsg(e)); document.getElementById('gdot').className = 'gdot'; }, opts);
+  navigator.geolocation.getCurrentPosition(p => onPos(p.coords), () => {}, opts);
+}
+function setGeoUI() {
+  const { lat } = S.shared.pool;
+  if (lat == null) { setGeoText('未设置游泳馆位置'); document.getElementById('gdot').className = 'gdot'; return; }
+}
+function setGeoText(t) { document.getElementById('gtxt').textContent = t; }
+function onPos(coords) {
+  lastCoords = coords;
+  const { lat, lng, radius } = S.shared.pool;
+  if (lat == null) { setGeoText('未设置游泳馆'); return; }
+  const d = dist(coords.latitude, coords.longitude, lat, lng);
+  const alertR = S.shared.pool.alertR || 1000;
+  geoNear = d <= radius;
+
+  /* 即将到达提醒（每次进入提醒圈只提醒一次） */
+  if (!geoNear && d <= alertR) {
+    if (!arriveHinted) { arriveHinted = true; toast(`🏊 即将到达游泳馆 · 还有约 ${fmtDist(d)}`); }
+  }
+  if (d > alertR * 1.2) arriveHinted = false;
+
+  /* 离开提醒：还在场没点「离开」时提醒结算 */
+  if (wasNear && !geoNear && A() && A().active) {
+    toast('📍 已离开泳馆范围，记得点「离开游泳馆」结算时长');
+  }
+  wasNear = geoNear;
+
+  if (geoNear) {
+    document.getElementById('gdot').className = 'gdot near';
+    setGeoText(`已到达（${Math.round(d)}m）`);
+    if (!popShown && !A().active) {
+      popShown = true; openSignPop();
+      document.getElementById('signPop').onclick = e => { if (e.target === document.getElementById('signPop')) closePop(); };
+    }
+  } else {
+    document.getElementById('gdot').className = 'gdot on';
+    setGeoText(`距离 ${fmtDist(d)}`);
+  }
+}
+setInterval(() => { if (!geoNear) popShown = false; }, 3000);
+function setCurrentAsPool() {
+  if (!navigator.geolocation) { toast('浏览器不支持定位'); return; }
+  if (!geoSecure()) { toast('定位需要 HTTPS 环境：请通过部署后的网址打开，不要直接双击本地文件'); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    S.shared.pool.lat = +pos.coords.latitude.toFixed(6);
+    S.shared.pool.lng = +pos.coords.longitude.toFixed(6);
+    S.shared.pool.name = '我的当前位置';
+    if (!S.shared.pool.radius) S.shared.pool.radius = 500;
+    save(); onPos(pos.coords); renderSet();
+    toast('已设为游泳馆位置 ✓');
+  }, e => toast(geoErrMsg(e)), { enableHighAccuracy: true, timeout: 12000 });
+}
+
+/* ---------- 高德地址搜索选点 ---------- */
+async function searchPlace() {
+  const key = amapKey();
+  if (!key) { toast('请先填写「① 地址搜索 Key」（服务平台选 Web 服务）'); document.getElementById('setAmap').focus(); return; }
+  const kw = document.getElementById('placeQuery').value.trim();
+  if (kw.length < 2) { toast('输入至少 2 个字再搜索'); return; }
+  const btn = document.querySelector('.searchrow .btn');
+  const oldTxt = btn.textContent; btn.textContent = '…'; btn.disabled = true;
+  try {
+    const url = `https://restapi.amap.com/v5/place/text?key=${encodeURIComponent(key)}&keywords=${encodeURIComponent(kw)}&page_size=10`;
+    const r = await fetch(url);
+    const j = await r.json();
+    if (j.status !== '1') throw new Error(j.info || '搜索失败');
+    const pois = (j.pois || []).filter(p => p.location);
+    if (!pois.length) { toast('没找到相关地点，换个关键词试试'); return; }
+    openPlaceSheet(pois);
+  } catch (e) { toast('搜索失败：' + e.message); }
+  btn.textContent = oldTxt; btn.disabled = false;
+}
+function openPlaceSheet(pois) {
+  closePlaceSheet();
+  window.__places = pois;
+  const sheet = document.createElement('div');
+  sheet.className = 'notesheet open'; sheet.id = 'placeSheet';
+  sheet.innerHTML = `
+    <div class="sheet">
+      <h4>选择游泳馆</h4>
+      <div class="hint">点击搜索结果，设为游泳馆位置</div>
+      <div class="placelist">
+        ${pois.map((p, i) => `
+          <div class="placeitem" onclick="selectPlace(${i})">
+            <div class="pi-nm">${esc(p.name)}</div>
+            <div class="pi-ad">${esc([p.address, p.adname].filter(Boolean).join(' · ')) || '地址未知'}</div>
+          </div>`).join('')}
+      </div>
+      <button class="btn ghost full" onclick="closePlaceSheet()">取消</button>
+    </div>`;
+  document.body.appendChild(sheet);
+  sheet.addEventListener('click', ev => { if (ev.target === sheet) closePlaceSheet(); });
+}
+function selectPlace(i) {
+  const p = (window.__places || [])[i];
+  if (!p) return;
+  const parts = String(p.location).split(',');
+  const lng = parseFloat(parts[0]), lat = parseFloat(parts[1]);
+  if (isNaN(lat) || isNaN(lng)) { toast('该地点坐标无效，换一个'); return; }
+  S.shared.pool.lat = +lat.toFixed(6);
+  S.shared.pool.lng = +lng.toFixed(6);
+  S.shared.pool.name = p.name;
+  if (!S.shared.pool.radius) S.shared.pool.radius = 500;
+  save(); closePlaceSheet(); renderSet(); render();
+  if (lastCoords) onPos(lastCoords);
+  toast('已设为游泳馆：' + p.name);
+}
+function closePlaceSheet() {
+  const s = document.getElementById('placeSheet');
+  if (s) s.remove();
+  window.__places = null;
+}
+
+/* ---------- 高德地图选点 ---------- */
+let amapPicker = null;
+/* 高德一个 Key 只能绑一个服务平台：搜索用 Web 服务 Key，地图用 Web JS API Key + 安全密钥 */
+function amapKey() { return (localStorage.getItem('swimAmapKey') || '').trim(); }
+function amapJsKey() { return (localStorage.getItem('swimAmapJsKey') || '').trim(); }
+function amapJsCode() { return (localStorage.getItem('swimAmapJsCode') || '').trim(); }
+function saveAmapKey() {
+  localStorage.setItem('swimAmapKey', document.getElementById('setAmap').value.trim());
+  toast('搜索 Key 已保存（仅存本机）');
+}
+function saveAmapJsKey() {
+  const v = document.getElementById('setAmapJs').value.trim();
+  localStorage.setItem('swimAmapJsKey', v);
+  if (v && v === amapKey()) toast('两个 Key 相同：高德一个 Key 只能绑一个平台，地图可能无法加载，请分别申请');
+  else toast('地图 Key 已保存（仅存本机）');
+}
+function saveAmapJsCode() {
+  localStorage.setItem('swimAmapJsCode', document.getElementById('setAmapJsCode').value.trim());
+  toast('安全密钥已保存（仅存本机）');
+}
+function openMapPicker() {
+  const key = amapJsKey();
+  if (!key) { toast('请先填写「② 地图选点 Key」（服务平台选 Web端 JS API）；没有 Key 可用「当前位置设为泳馆」'); document.getElementById('setAmapJs').focus(); return; }
+  if (!amapJsCode()) toast('提醒：还没填「③ 安全密钥」，地图可能会白屏（控制台该 Key 详情里查看）');
+  if (amapPicker) { closeMapPicker(); }
+  const mask = document.createElement('div');
+  mask.className = 'mapmask open'; mask.id = 'mapMask';
+  mask.innerHTML = `
+    <div class="mapwrap">
+      <div class="mapbar">
+        <div>🗺️ 选择游泳馆位置<span class="mb-sub">拖动地图或标记，放到泳馆入口</span></div>
+        <button onclick="closeMapPicker()">✕</button>
+      </div>
+      <div class="mapbox" id="amapBox"><div class="maploading">地图加载中…</div></div>
+      <div class="mapacts">
+        <button class="btn ghost full" onclick="mapLocate()">📍 定位到当前位置</button>
+        <button class="btn pri full" onclick="confirmMapPicker()">确认选点</button>
+      </div>
+    </div>`;
+  document.body.appendChild(mask);
+  if (window.AMap && window.AMap.Map) { initAmap(); return; }
+  // 安全密钥必须在 SDK 加载前设置（控制台为 JS API Key 自动生成）
+  if (amapJsCode()) window._AMapSecurityConfig = { securityJsCode: amapJsCode() };
+  const s = document.createElement('script');
+  s.src = `https://webapi.amap.com/maps?v=2.0&key=${encodeURIComponent(key)}&plugin=AMap.Geolocation`;
+  s.onload = () => initAmap();
+  s.onerror = () => { const l = document.querySelector('.maploading'); if (l) l.textContent = '地图加载失败：请检查网络、或当前网址是否在高德 Key 的域名白名单内'; };
+  document.head.appendChild(s);
+}
+function initAmap() {
+  const box = document.getElementById('amapBox');
+  if (!box) return;
+  if (!window.AMap || !window.AMap.Map) {
+    const l = box.querySelector('.maploading');
+    if (l) l.textContent = '地图 SDK 加载异常：请检查「地图选点 Key」服务平台是否为 Web端(JS API)、安全密钥是否填写、当前网址是否在 Key 的域名白名单内';
+    return;
+  }
+  const p = S.shared.pool;
+  const center = p.lat != null ? [p.lng, p.lat] : (lastCoords ? [lastCoords.longitude, lastCoords.latitude] : [116.3974, 39.9093]);
+  const map = new AMap.Map('amapBox', { zoom: 17, center });
+  const marker = new AMap.Marker({ draggable: true, position: center, map });
+  // 点击地图任意位置也能把标记移过去（不只是拖拽）
+  map.on('click', e => { marker.setPosition(e.lnglat); });
+  amapPicker = { map, marker };
+  const l = box.querySelector('.maploading'); if (l) l.remove();
+}
+function mapLocate() {
+  if (!navigator.geolocation || !amapPicker) { toast('定位不可用'); return; }
+  if (!geoSecure()) { toast('定位需要 HTTPS 环境：请通过部署后的网址打开'); return; }
+  toast('定位中…');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lnglat = [pos.coords.longitude, pos.coords.latitude];
+    amapPicker.map.setCenter(lnglat);
+    amapPicker.marker.setPosition(lnglat);
+  }, e => toast(geoErrMsg(e)), { enableHighAccuracy: true, timeout: 12000 });
+}
+function confirmMapPicker() {
+  if (!amapPicker) return;
+  const pos = amapPicker.marker.getPosition();
+  S.shared.pool.lat = +pos.lat.toFixed(6);
+  S.shared.pool.lng = +pos.lng.toFixed(6);
+  if (!S.shared.pool.name) S.shared.pool.name = '地图选点的位置';
+  if (!S.shared.pool.radius) S.shared.pool.radius = 500;
+  save(); closeMapPicker(); renderSet(); render();
+  if (lastCoords) onPos(lastCoords);
+  toast('泳馆位置已更新 ✓');
+}
+function closeMapPicker() {
+  const m = document.getElementById('mapMask');
+  if (m) m.remove();
+  if (amapPicker) { try { amapPicker.map.destroy(); } catch (e) {} amapPicker = null; }
+}
+
+/* =========================================================
+   渲染：首页
+   ========================================================= */
+function render() {
+  const acc = A();
+  const myUsed = acc.logs.reduce((s, l) => s + (l.count || 1), 0);
+  const frUsed = usedOf(otherId());
+  const total = S.shared.quota * memberCount();
+  const totalUsed = myUsed + (frUsed || 0);
+  const left = Math.max(0, total - totalUsed);
+  document.getElementById('hLeft').textContent = left;
+  document.getElementById('hSub').textContent = frUsed == null
+    ? `总 ${total} 次 · 已用 ${totalUsed} 次（朋友用量未知，开启同步后可见）`
+    : `总 ${total} 次 · 已用 ${totalUsed} 次`;
+  const pct = total ? Math.min(100, Math.round(totalUsed / total * 100)) : 0;
+  document.getElementById('hPct').textContent = pct;
+  document.getElementById('hBar').style.width = pct + '%';
+
+  const quota = S.shared.quota;
+  const meLeft = quota - myUsed;
+  document.getElementById('nmMe').textContent = acc.name;
+  document.getElementById('lvMe').textContent = Math.max(0, meLeft);
+  document.getElementById('ufMe').textContent = `剩余 / ${quota} 次`;
+  document.getElementById('brMe').style.setProperty('--p', Math.min(100, myUsed / quota * 100));
+  document.getElementById('tgMe').classList.toggle('hidden', meLeft >= 0);
+
+  const pcFr = document.getElementById('pcFr'), pcHint = document.getElementById('pcFrHint'), frSum = document.getElementById('frSummary');
+  if (frUsed != null) {
+    pcFr.classList.remove('hidden'); pcHint.classList.add('hidden');
+    const frLeft = quota - frUsed;
+    document.getElementById('nmFr').textContent = (S.accounts[otherId()]?.name) || (S.shared.members[otherId()]?.name) || '朋友';
+    document.getElementById('lvFr').textContent = Math.max(0, frLeft);
+    document.getElementById('ufFr').textContent = `剩余 / ${quota} 次`;
+    document.getElementById('brFr').style.setProperty('--p', Math.min(100, frUsed / quota * 100));
+    document.getElementById('tgFr').classList.toggle('hidden', frLeft >= 0);
+    const last = lastSwimOf(otherId());
+    frSum.classList.remove('hidden');
+    document.getElementById('frSummaryTxt').innerHTML =
+      `🫧 <b>${esc(document.getElementById('nmFr').textContent)}</b> 累计 ${frUsed} 次` +
+      (last ? ` · 最近游泳 ${fmtDate(last)}` : '') + '（仅汇总，明细仅 TA 可见）';
+  } else {
+    pcFr.classList.add('hidden'); pcHint.classList.remove('hidden'); frSum.classList.add('hidden');
+  }
+  document.getElementById('quotaSub').textContent = `每人 ${quota} 次 · 共 ${memberCount()} 人`;
+
+  const ab = document.getElementById('activeBar');
+  if (acc.active) {
+    const rec = acc.logs.find(l => l.id === acc.active);
+    if (rec) {
+      ab.classList.add('show');
+      document.getElementById('abInfo').innerHTML =
+        `<b>${esc(acc.name)}</b> 已入场 · ${fmtDate(rec.enter)} · 消耗 ${rec.count} 次` +
+        (rec.dist != null ? ` · 📍 当时距泳馆 ${rec.dist}m` : '');
+    }
+  } else ab.classList.remove('show');
+
+  const alerts = document.getElementById('alerts');
+  let html = '';
+  if (meLeft < 0) html += `<div class="tip bad"><span class="ic">⚠️</span><span><b>${esc(acc.name)}</b> 已超额使用 ${Math.abs(meLeft)} 次！</span></div>`;
+  if (S.shared.pool.lat == null) html += `<div class="tip warn"><span class="ic">📍</span><span>尚未设置游泳馆位置，请到<b>设置</b>页设置，才能使用自动签到功能。</span></div>`;
+  alerts.innerHTML = html;
+}
+
+/* =========================================================
+   渲染：统计（全部为当前账号视角）
+   ========================================================= */
+function renderStat() {
+  const acc = A();
+  const done = acc.logs.filter(l => l.leave);
+  const times = acc.logs.reduce((s, l) => s + (l.count || 1), 0);
+  const durMs = done.reduce((s, l) => s + (l.leave - l.enter), 0);
+  const days = new Set(done.map(l => dayKey(l.enter))).size;
+  const avg = done.length ? Math.round(durMs / done.length / 60000) : 0;
+  document.getElementById('sTotal').textContent = times;
+  document.getElementById('sDur').textContent = (durMs / 3600000).toFixed(1);
+  document.getElementById('sDays').textContent = days;
+  document.getElementById('sAvg').textContent = avg;
+
+  document.getElementById('grName').textContent = acc.name;
+
+  renderGrowth();
+  renderWeekChart();
+  mViewDate = new Date();
+  renderMonthChart();
+  renderDurList();
+  renderCrowdList();
+
+  const lg = document.getElementById('wLg');
+  lg.children[0].innerHTML = `<i style="background:linear-gradient(180deg,var(--me),var(--me2))"></i>${esc(acc.name)}`;
+}
+
+/* ---------- 个人成长 ---------- */
+function renderGrowth() {
+  const acc = A();
+  const done = acc.logs.filter(l => l.leave);
+  const durMs = done.reduce((s, l) => s + (l.leave - l.enter), 0);
+  const days = new Set(done.map(l => dayKey(l.enter))).size;
+  const avg = done.length ? Math.round(durMs / done.length / 60000) : 0;
+  document.getElementById('grDur').textContent = (durMs / 3600000).toFixed(1);
+  document.getElementById('grSwims').textContent = done.length;
+  document.getElementById('grAvg').textContent = avg;
+  document.getElementById('grDays').textContent = days;
+
+  /* 本月 vs 上月 */
+  const now = new Date(); now.setHours(0, 0, 0, 0);
+  const mStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const lmStart = new Date(now.getFullYear(), now.getMonth() - 1, 1).getTime();
+  const mMs = done.filter(l => l.leave >= mStart).reduce((s, l) => s + (l.leave - l.enter), 0);
+  const lmMs = done.filter(l => l.leave >= lmStart && l.leave < mStart).reduce((s, l) => s + (l.leave - l.enter), 0);
+  document.getElementById('grMonth').textContent = formatDur(mMs);
+  const mom = document.getElementById('grMom');
+  if (mMs === 0 && lmMs === 0) { mom.textContent = '开始记录后这里显示成长'; mom.className = 'gm-mom flat'; }
+  else if (lmMs === 0) { mom.textContent = '上月无记录，本月起步 🌱'; mom.className = 'gm-mom up'; }
+  else {
+    const pct = Math.round((mMs - lmMs) / lmMs * 100);
+    if (pct > 0) { mom.textContent = `↑ 较上月 +${pct}%`; mom.className = 'gm-mom up'; }
+    else if (pct < 0) { mom.textContent = `↓ 较上月 ${pct}%`; mom.className = 'gm-mom down'; }
+    else { mom.textContent = '与上月持平'; mom.className = 'gm-mom flat'; }
+  }
+
+  /* 最近 8 周（周一为周首） */
+  const mondayOf = d => { const x = new Date(d); const w = (x.getDay() + 6) % 7; x.setDate(x.getDate() - w); x.setHours(0, 0, 0, 0); return x.getTime(); };
+  const thisMon = mondayOf(now);
+  const weeks = [];
+  for (let i = 7; i >= 0; i--) {
+    const ws = thisMon - i * 7 * 86400000, we = ws + 7 * 86400000;
+    const ms = done.filter(l => l.enter >= ws && l.enter < we).reduce((s, l) => s + (l.leave - l.enter), 0);
+    weeks.push({ ms, label: `${new Date(ws).getMonth() + 1}/${new Date(ws).getDate()}` });
+  }
+  const maxMs = Math.max(1, ...weeks.map(w => w.ms));
+  document.getElementById('gChart').innerHTML = weeks.map((w, i) => `
+    <div class="gc-col">
+      <div class="gc-val">${w.ms ? (w.ms / 3600000).toFixed(1) + 'h' : ''}</div>
+      <div class="gc-bars"><div class="gc-bar" style="height:${Math.max(2, Math.round(w.ms / maxMs * 60))}px"></div></div>
+      <div class="gc-day">${i === 7 ? '本周' : w.label}</div>
+    </div>`).join('');
+
+  /* 个人最佳 */
+  if (done.length) {
+    const best = done.reduce((a, b) => (b.leave - b.enter) > (a.leave - a.enter) ? b : a);
+    document.getElementById('grBest').textContent = `${formatDur(best.leave - best.enter)} · ${dayLabel(best.enter)}`;
+  } else document.getElementById('grBest').textContent = '完成游泳后点亮 🏆';
+}
+
+/* ---------- 5 条 + 滑动 通用装配（行高动态测量，适配多行内容） ---------- */
+function mountScroll(innerId, fadeId, hintId, html, count, emptyHtml) {
+  const inner = document.getElementById(innerId), fade = document.getElementById(fadeId), hint = document.getElementById(hintId);
+  if (!count) {
+    inner.innerHTML = emptyHtml; inner.style.maxHeight = 'none';
+    fade.classList.add('hidden'); hint.classList.add('hidden');
+    return;
+  }
+  inner.innerHTML = html;
+  if (count > 5) {
+    /* 量出前 5 条的精确高度，容器只露 5 条，其余滑动查看（不可见时按估值回退） */
+    const kids = Array.from(inner.children).slice(0, 5);
+    const h = kids.reduce((s, k) => s + k.offsetHeight, 0) + 2;
+    inner.style.maxHeight = (h > 40 ? h : 320) + 'px';
+    fade.classList.remove('hidden');
+    hint.classList.remove('hidden');
+    hint.textContent = `上滑查看更早的 ${count - 5} 条记录 ›`;
+  } else {
+    inner.style.maxHeight = 'none';
+    fade.classList.add('hidden'); hint.classList.add('hidden');
+  }
+}
+
+/* ---------- 游泳时长记录（我的完整流水，含在场中） ---------- */
+function renderDurList() {
+  const acc = A();
+  const recs = [...acc.logs].sort((a, b) => b.enter - a.enter);
+  document.getElementById('durCount').textContent = recs.length ? `${recs.length} 条` : '';
+  let html = '';
+  recs.forEach(l => {
+    const dur = l.leave ? formatDur(l.leave - l.enter) : '<span style="color:var(--accentS)">在场中…</span>';
+    const timeStr = `${fmtTime(l.enter)}${l.leave ? ` → ${fmtTime(l.leave)}` : ''}`;
+    const distStr = l.dist != null ? ` · 📍 距泳馆 ${l.dist}m` : '';
+    const crowdStr = l.crowd ? `${crowdIcon(l.crowd)} ${l.crowd}${l.crowdTime ? ` · 约 ${l.crowdTime} 后变挤` : ''}` : '';
+    html += `<div class="tlrow">
+      <div class="tl-who me">${acc.emoji || '🫧'}</div>
+      <div class="tl-mid">
+        <div class="tl-date">${dayLabel(l.enter)}</div>
+        <div class="tl-sub">${timeStr}${distStr}</div>
+        ${crowdStr ? `<div class="tl-sub">${crowdStr}</div>` : ''}
+        ${l.note ? `<div class="tl-note">💬 ${esc(l.note)}</div>` : ''}
+      </div>
+      <div class="tl-dur">${dur}</div>
+    </div>`;
+  });
+  mountScroll('durInner', 'durFade', 'durHint', html, recs.length,
+    '<div class="empty" style="padding:32px 16px;text-align:center;color:#B8CCE0;font-size:13px">到游泳馆签到后，这里会显示你的每一次游泳</div>');
+}
+
+/* ---------- 拥挤情况记录 ---------- */
+function renderCrowdList() {
+  const acc = A();
+  const crowded = acc.logs.filter(l => l.crowd && l.crowd !== '空闲').sort((a, b) => b.enter - a.enter);
+  document.getElementById('crowdCount').textContent = crowded.length ? `${crowded.length} 条` : '';
+  let html = '';
+  crowded.forEach(l => {
+    html += `<div class="tip ${l.crowd === '爆满' || l.crowd === '人多' ? 'warn' : 'info'}" style="margin-bottom:8px">
+      <span class="ic">${crowdIcon(l.crowd)}</span>
+      <span><b>${dayLabel(l.enter)}</b> ${fmtTime(l.enter)} 离场时${l.crowd}${l.crowdTime ? `，约 ${l.crowdTime} 后开始人多` : ''}${l.note ? ` · ${esc(l.note)}` : ''}</span>
+    </div>`;
+  });
+  mountScroll('crowdInner', 'crowdFade', 'crowdHint', html, crowded.length,
+    '<div class="empty" style="padding:32px 16px;text-align:center;color:#B8CCE0;font-size:13px">离场时记录拥挤情况后，这里会帮你汇总人少的时段</div>');
+}
+
+/* ---------- 周图表（我的） ---------- */
+function renderWeekChart() {
+  const box = document.getElementById('wChart');
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const key = dayKey(d.getTime());
+    const meC = A().logs.filter(l => dayKey(l.date) === key).reduce((s, l) => s + (l.count || 1), 0);
+    days.push({ label: i === 0 ? '今' : ['日', '一', '二', '三', '四', '五', '六'][d.getDay()], meC, today: i === 0 });
+  }
+  const max = Math.max(4, ...days.map(d => d.meC));
+  box.innerHTML = days.map(d => `
+    <div class="wc-col">
+      <div class="wc-val">${d.meC || ''}</div>
+      <div class="wc-bars"><div class="wc-bar me" style="height:${Math.round(d.meC / max * 100)}px"></div></div>
+      <div class="wc-day ${d.today ? 'today' : ''}">${d.label}</div>
+    </div>`).join('');
+}
+
+/* ---------- 月度汇总（我的） ---------- */
+let mViewDate = new Date();
+function mPrev() { mViewDate.setMonth(mViewDate.getMonth() - 1); renderMonthChart(); }
+function mNext() { mViewDate.setMonth(mViewDate.getMonth() + 1); renderMonthChart(); }
+function renderMonthChart() {
+  const y = mViewDate.getFullYear(), m = mViewDate.getMonth();
+  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  document.getElementById('mTxt').textContent = `${y}年${m + 1}月`;
+  document.getElementById('mMonthLabel').textContent = `${y}年${m + 1}月`;
+
+  const dayData = {};
+  let meTotal = 0, meMs = 0, swimDays = 0;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dt = new Date(y, m, d);
+    const key = dayKey(dt.getTime());
+    const recs = A().logs.filter(l => dayKey(l.date) === key);
+    const meC = recs.reduce((s, l) => s + (l.count || 1), 0);
+    meMs += recs.filter(l => l.leave).reduce((s, l) => s + (l.leave - l.enter), 0);
+    meTotal += meC;
+    if (meC > 0) swimDays++;
+    dayData[d] = meC;
+  }
+  const avg = swimDays > 0 ? (meTotal / swimDays).toFixed(1) : 0;
+  const frUsed = usedOf(otherId());
+  document.getElementById('mSummary').innerHTML = `
+    <div class="mc-sm"><div class="v me">${meTotal}</div><div class="k">🫧 我的次数</div></div>
+    <div class="mc-sm"><div class="v me">${swimDays}</div><div class="k">📆 游泳天数</div></div>
+    <div class="mc-sm"><div class="v me">${avg}</div><div class="k">📊 日均次数</div></div>
+    <div class="mc-sm"><div class="v me">${(meMs / 3600000).toFixed(1)}</div><div class="k">⏱ 时长(h)</div></div>
+    <div class="mc-sm"><div class="v me">${Math.max(0, S.shared.quota * memberCount() - (usedOf('me') || 0) - (frUsed || 0))}</div><div class="k">🎫 全卡剩余</div></div>
+    <div class="mc-sm"><div class="v fr">${frUsed == null ? '—' : frUsed}</div><div class="k">🩰 朋友累计</div></div>`;
+
+  const today = new Date();
+  const cal = document.getElementById('mCal');
+  const firstDay = new Date(y, m, 1).getDay();
+  const maxTotal = Math.max(1, ...Object.values(dayData));
+
+  let html = '<div class="mcal-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div><div class="mcal-grid">';
+  for (let i = 0; i < firstDay; i++) html += '<div class="mcal-cell empty"></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const total = dayData[d];
+    const isToday = today.getFullYear() === y && today.getMonth() === m && today.getDate() === d;
+    const intensity = Math.min(4, Math.round((total / maxTotal) * 4));
+    const badge = total > 0 ? `<span class="mcal-dot l${intensity}">${total}</span>` : '';
+    const wd = new Date(y, m, d).getDay();
+    const isWeekend = wd === 0 || wd === 6;
+    html += `<div class="mcal-cell${isToday ? ' today' : ''}${isWeekend && !isToday ? ' weekend' : ''}">
+      <span class="mcal-day">${d}</span>${badge}
+    </div>`;
+  }
+  html += '</div>';
+  cal.innerHTML = html;
+}
+
+/* =========================================================
+   渲染：设置
+   ========================================================= */
+function renderSet() {
+  const acc = A();
+  document.getElementById('setNmMe').value = acc.name;
+  document.getElementById('setRad').value = S.shared.pool.radius || 500;
+  document.getElementById('setAlertR').value = S.shared.pool.alertR || 1000;
+  document.getElementById('setQuota').value = S.shared.quota;
+  document.getElementById('setAmap').value = amapKey();
+  document.getElementById('setAmapJs').value = amapJsKey();
+  document.getElementById('setAmapJsCode').value = amapJsCode();
+  const secWarn = document.getElementById('secWarn');
+  if (secWarn) secWarn.classList.toggle('hidden', geoSecure());
+  const p = S.shared.pool;
+  document.getElementById('poolState').textContent = p.lat == null ? '未设置' : '已设置';
+  if (p.lat == null) {
+    document.getElementById('poolName').textContent = '未设置游泳馆';
+    document.getElementById('poolSub').textContent = '设置后，到达附近会自动提醒签到';
+  } else {
+    document.getElementById('poolName').textContent = p.name || '地图选点的位置';
+    document.getElementById('poolSub').textContent =
+      `签到半径 ${p.radius || 500}m · 到达提醒 ${p.alertR || 1000}m`;
+  }
+  document.getElementById('reconApp').textContent = appLeft();
+  calcRecon();
+}
+function saveName(v) {
+  const name = (v || '').trim() || '我';
+  A().name = name;
+  if (S.shared.members[S.current]) S.shared.members[S.current].name = name;
+  save(); render(); toast('已保存');
+}
+function saveGeo() {
+  const rad = parseInt(document.getElementById('setRad').value) || 500;
+  const alertR = Math.max(100, parseInt(document.getElementById('setAlertR').value) || 1000);
+  S.shared.pool.radius = rad;
+  S.shared.pool.alertR = alertR;
+  save(); renderSet(); if (lastCoords) onPos(lastCoords);
+  toast('已保存');
+}
+function saveQuota() {
+  S.shared.quota = parseInt(document.getElementById('setQuota').value) || 60;
+  save(); render(); renderSet(); toast('已保存');
+}
+function clearAll() {
+  if (!confirm('确定清空我的所有记录？此操作不可恢复！')) return;
+  const acc = A();
+  acc.logs = []; acc.active = null; acc.del = []; acc.delLog = [];
+  save(); render(); toast('已清空');
+}
+function exportData() {
+  const acc = A();
+  const payload = {
+    v: 3, exportedAt: new Date().toISOString(), account: acc.id, name: acc.name,
+    data: { logs: acc.logs, del: acc.del, delLog: acc.delLog },
+    shared: S.shared
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob), a = document.createElement('a');
+  a.href = url; a.download = `游泳日记_${acc.name}.json`; a.click();
+  URL.revokeObjectURL(url); toast('已导出');
+}
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const j = JSON.parse(ev.target.result);
+      if (!confirm('导入将覆盖本机所有账号数据，确定继续？')) return;
+      if (j.v === 3 && j.data) {
+        /* 单账号备份：导入到当前账号 */
+        const acc = A();
+        acc.logs = j.data.logs || []; acc.del = j.data.del || []; acc.delLog = j.data.delLog || [];
+        if (j.shared) S.shared = Object.assign(structuredClone(DEF.shared), j.shared);
+      } else if (j.v === 3) {
+        S = Object.assign(structuredClone(DEF), j);
+      } else if (j.logs) {
+        S = migrateV2(j);
+      } else throw new Error('bad');
+      if (!S.current || !S.accounts[S.current]) { S.current = null; save(); showGate(); }
+      else { save(); render(); }
+      toast('导入成功 ✓');
+    } catch (err) { toast('文件格式错误'); }
+  };
+  reader.readAsText(file); e.target.value = '';
+}
+
+/* =========================================================
+   同步：shared.json（共享汇总）+ private_<id>.json（私有流水）
+   ========================================================= */
+let syncTimer = null, syncBusy = false;
+function scheduleSync() { if (!S.prov || !S.current) return; clearTimeout(syncTimer); syncTimer = setTimeout(() => syncNow(), 1200); }
+
+function renderSyncChip() {
+  const d = document.getElementById('sdot'), t = document.getElementById('stxt');
+  if (!d || !t) return;
+  d.className = 'syncd';
+  if (!S.prov) { t.textContent = '仅本机'; return; }
+  if (syncBusy) { d.className = 'syncd busy'; t.textContent = '同步中'; return; }
+  if (!S.syncedAt) { d.className = 'syncd warn'; t.textContent = '待同步'; return; }
+  const age = Date.now() - S.syncedAt;
+  if (age < 120000) { d.className = 'syncd ok'; t.textContent = '已同步'; }
+  else if (age < 86400000) { d.className = 'syncd ok'; t.textContent = Math.floor(age / 3600000) + '小时前'; }
+  else { d.className = 'syncd warn'; t.textContent = Math.floor(age / 86400000) + '天前'; }
+}
+function renderSyncForm() {
+  const g = id => document.getElementById(id);
+  if (!g('setProv')) return;
+  g('setProv').value = S.prov;
+  g('setToken').value = S.token;
+  g('setGist').value = S.gist;
+  g('setUrl').value = S.url;
+  g('setRoom').value = S.room;
+  g('gistBox').classList.toggle('hidden', S.prov !== 'gist');
+  g('workerBox').classList.toggle('hidden', S.prov !== 'worker');
+  g('inviteBox').classList.toggle('hidden', !(S.prov === 'gist' && S.gist));
+  if (S.prov === 'gist' && S.gist) g('inviteTxt').textContent = inviteLink();
+  g('syncTip').textContent = S.syncedAt ? '上次 ' + fmtDate(S.syncedAt) : '';
+}
+function saveSync() {
+  const g = id => document.getElementById(id);
+  S.prov = g('setProv').value;
+  S.token = g('setToken').value.trim();
+  S.gist = g('setGist').value.trim();
+  S.url = g('setUrl').value.trim().replace(/\/+$/, '');
+  S.room = g('setRoom').value.trim();
+  localStorage.setItem('swimCardV3', JSON.stringify(S));
+  renderSyncForm(); renderSyncChip();
+  if (S.prov) syncNow(); else toast('同步已关闭，数据仅存本机');
+}
+function jumpSync() {
+  go('set');
+  setTimeout(() => document.getElementById('syncCard').scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+}
+
+/* ---------- 合并 ---------- */
+function mergeShared(r) {
+  if (!r) return;
+  const sh = S.shared;
+  if ((r.rev || 0) > (sh.rev || 0)) {
+    sh.quota = r.quota; sh.pool = r.pool;
+  }
+  sh.rev = Math.max(sh.rev || 0, r.rev || 0);
+  const rm = r.members || {};
+  for (const id in rm) {
+    const lm = sh.members[id];
+    if (!lm || (rm[id].rev || 0) >= (lm.rev || 0)) sh.members[id] = rm[id];
+  }
+}
+function mergePrivate(r) {
+  const acc = A();
+  if (!r || !r.logs) return;
+  const delSet = new Set([...(acc.del || []), ...(r.del || [])]);
+  const dl = [...(acc.delLog || []), ...(r.delLog || [])];
+  const dlIds = new Set(dl.map(x => x.id));
+  const map = new Map();
+  [...(r.logs || []), ...(acc.logs || [])].forEach(e => { if (e && e.id) map.set(e.id, e); });
+  acc.logs = [...map.values()].filter(e => !delSet.has(e.id) && !dlIds.has(e.id));
+  acc.del = [...delSet];
+  acc.delLog = dl.filter((v, i, a) => a.findIndex(y => y.id === v.id) === i);
+}
+function myMember() {
+  const acc = A();
+  const used = acc.logs.reduce((s, l) => s + (l.count || 1), 0);
+  const last = acc.logs.reduce((m, l) => Math.max(m, l.date || 0), 0);
+  return { name: acc.name, used, lastSwimAt: last, rev: acc.rev || Date.now() };
+}
+function sharedPayload() {
+  return {
+    quota: S.shared.quota,
+    pool: S.shared.pool,
+    members: Object.assign({}, S.shared.members, { [S.current]: myMember() }),
+    rev: Date.now()
+  };
+}
+function privatePayload() {
+  const acc = A();
+  return { logs: acc.logs, del: acc.del, delLog: acc.delLog, rev: acc.rev || Date.now() };
+}
+async function syncNow(manual) {
+  if (!S.current) { if (manual) toast('请先登录账号'); return; }
+  if (!S.prov) { if (manual) toast('先选择同步方式'); return; }
+  if (S.prov === 'gist' && !S.token) { if (manual) toast('先填 GitHub Token'); return; }
+  if (S.prov === 'gist' && !S.gist) { if (manual) toast('先点「创建房间」或填 Gist ID'); return; }
+  if (S.prov === 'worker' && (!S.url || !S.room)) { if (manual) toast('先填接口地址和房间码'); return; }
+  if (syncBusy) return;
+  syncBusy = true; renderSyncChip();
+  try {
+    let rShared = await (S.prov === 'gist' ? gistGet('shared.json') : workerGet('shared.json'));
+    if (!rShared) rShared = await tryLegacyShared();
+    if (rShared) mergeShared(rShared);
+    const rPriv = await (S.prov === 'gist' ? gistGet(`private_${S.current}.json`) : workerGet(`private_${S.current}.json`));
+    if (rPriv) mergePrivate(rPriv);
+    await (S.prov === 'gist' ? gistPut('shared.json', sharedPayload()) : workerPut('shared.json', sharedPayload()));
+    await (S.prov === 'gist' ? gistPut(`private_${S.current}.json`, privatePayload()) : workerPut(`private_${S.current}.json`, privatePayload()));
+    S.syncedAt = Date.now();
+    localStorage.setItem('swimCardV3', JSON.stringify(S));
+    render(); renderSet(); renderSyncForm();
+    if (manual) toast('同步成功 ✓');
+  } catch (e) {
+    console.error(e);
+    if (manual) toast('同步失败：' + e.message);
+  }
+  syncBusy = false; renderSyncChip();
+}
+/* 旧版单文件数据一次性迁移（swim.json → shared + private） */
+async function tryLegacyShared() {
+  if (S.prov !== 'gist') return null;
+  try {
+    const old = await gistGet('swim.json');
+    if (!old || !old.logs) return null;
+    const members = {};
+    ['me', 'fr'].forEach(id => {
+      const ls = (old.logs || []).filter(l => l.who === id);
+      members[id] = {
+        name: (old.names && old.names[id]) || id,
+        used: ls.reduce((s, l) => s + (l.count || 1), 0),
+        lastSwimAt: ls.reduce((m, l) => Math.max(m, l.date || 0), 0),
+        rev: 1
+      };
+    });
+    /* 自己的那半并入当前账号私有流水 */
+    const mine = (old.logs || []).filter(l => l.who === S.current).map(l => { const c = { ...l }; delete c.who; return c; });
+    if (mine.length) mergePrivate({ logs: mine, del: [], delLog: [], rev: 1 });
+    return { quota: old.quota || 60, pool: Object.assign({ radius: 500 }, old.pool || {}), members, rev: 1 };
+  } catch (e) { return null; }
+}
+
+/* ---- 后端 A：GitHub Gist（多文件） ---- */
+const GH = 'https://api.github.com';
+async function gistCreate() {
+  if (!S.token) { toast('先填 GitHub Token'); return; }
+  syncBusy = true; renderSyncChip();
+  try {
+    const r = await fetch(GH + '/gists', {
+      method: 'POST',
+      headers: { Authorization: 'token ' + S.token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        description: 'swimcard-v3', public: false,
+        files: {
+          'shared.json': { content: JSON.stringify(sharedPayload()) },
+          [`private_${S.current}.json`]: { content: JSON.stringify(privatePayload()) }
+        }
+      })
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    S.gist = j.id; S.prov = 'gist'; S.syncedAt = Date.now();
+    localStorage.setItem('swimCardV3', JSON.stringify(S));
+    renderSyncForm(); renderSyncChip(); toast('房间已创建 🎉');
+    document.getElementById('inviteTxt').textContent = inviteLink();
+    setTimeout(() => document.getElementById('inviteBox').scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+  } catch (e) { toast('创建失败：' + e.message); }
+  syncBusy = false; renderSyncChip();
+}
+async function gistGet(file) {
+  const r = await fetch(GH + '/gists/' + S.gist, { headers: { Authorization: 'token ' + S.token } });
+  if (!r.ok) throw new Error('读取失败 ' + r.status);
+  const j = await r.json();
+  const f = j.files && j.files[file];
+  return f ? JSON.parse(f.content) : null;
+}
+async function gistPut(file, obj) {
+  const r = await fetch(GH + '/gists/' + S.gist, {
+    method: 'PATCH',
+    headers: { Authorization: 'token ' + S.token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ files: { [file]: { content: JSON.stringify(obj) } } })
+  });
+  if (!r.ok) throw new Error('写入失败 ' + r.status);
+}
+function inviteLink() { return location.origin + location.pathname + '#g=' + S.gist + '&t=' + encodeURIComponent(S.token); }
+function copyInvite() {
+  const t = inviteLink();
+  if (navigator.clipboard) navigator.clipboard.writeText(t).then(() => toast('已复制，发给朋友'));
+  else toast('请长按上方链接手动复制');
+}
+function shareInvite() {
+  const t = inviteLink();
+  if (navigator.share) navigator.share({ title: '游泳日记', text: '点开加入我们的游泳卡', url: t }).catch(() => {});
+  else copyInvite();
+}
+
+/* ---- 后端 B：自建接口（Cloudflare Worker，多文件） ---- */
+async function workerGet(file) {
+  const r = await fetch(`${S.url}/api/room/${encodeURIComponent(S.room)}/${file}`);
+  if (!r.ok) throw new Error('读取失败 ' + r.status);
+  const txt = await r.text();
+  return (txt && txt !== 'null') ? JSON.parse(txt) : null;
+}
+async function workerPut(file, body) {
+  const r = await fetch(`${S.url}/api/room/${encodeURIComponent(S.room)}/${file}`, {
+    method: 'PUT', body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json' }
+  });
+  if (!r.ok) throw new Error('写入失败 ' + r.status);
+}
+
+/* ---- 启动 ---- */
+let appInited = false;
+function initApp() {
+  buildTimeSel();
+  render();
+  if (appInited) return;
+  appInited = true;
+  initGeo();
+  setInterval(render, 60000);
+  setInterval(renderSyncChip, 3000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && S.prov && S.current) syncNow(); });
+}
+(function boot() {
+  const h = location.hash || '';
+  const mg = h.match(/[#&]g=([^&]+)/), mt = h.match(/[#&]t=([^&]+)/);
+  if (mg && mt) {
+    S.gist = decodeURIComponent(mg[1]); S.token = decodeURIComponent(mt[1]); S.prov = 'gist';
+    localStorage.setItem('swimCardV3', JSON.stringify(S));
+    history.replaceState(null, '', location.pathname);
+  }
+  renderSyncForm(); renderSyncChip();
+  if (S.prov) scheduleSync();
+  if (!S.current || !S.accounts[S.current]) showGate();
+  else initApp();
+  /* 邀请链接场景：已登录则直接同步，未登录先建账号 */
+  if (mg && mt) {
+    if (S.current) setTimeout(() => syncNow().then(() => toast('已同步房间数据 ✓')), 400);
+    else setTimeout(() => toast('请先创建账号，加入后自动同步'), 600);
+  }
+})();
+</script>
+</body>
+</html>
